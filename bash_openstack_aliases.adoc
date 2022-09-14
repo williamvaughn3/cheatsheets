@@ -1,0 +1,54 @@
+==== Aliases that help 
+
+Add to the profile or bash_alias and ref in bashrc
+
+[source, bash]
+----
+alias sshvy="ssh -i /home/$USER/.ssh/vyos.pem"
+alias sshans="ssh -i /home/$USER/.ssh/ansible.pem"
+alias cp='cp -i -v'
+alias mv='mv -i -v'
+alias rm='rm -rv -i -v'
+# Add color, formatting, etc to ls without re-typing a bunch of options every time
+alias ll='ls -alhF --color=auto --group-directories-first'
+alias ls="ls --color=auto --group-directories-first"
+
+#View Git status.
+alias gs='git status'
+# Add a file to Git.
+alias ga='git add'
+# Add all files to Git.
+alias gaa='git add --all'
+# Commit changes to the code.
+alias gc="git commit -m $1"
+# View the Git log.
+alias gl='git log --oneline'
+# Create a new Git branch and move to the new branch at the same time. 
+alias gb='git checkout -b'
+# View the difference.
+alias gd='git diff'
+#Move to the parent folder.
+alias ..='cd ..;pwd'
+# Move up two parent folders.
+alias ...='cd ../..;pwd'
+# Move up three parent folders.
+alias ....='cd ../../..;pwd'
+# Openstack Aliases
+alias mkstack="openstack stack create -e env.yaml -t main.yaml $1"
+alias lsstack="openstack stack list"
+alias rmstack="openstack stack delete $1 -y"
+alias stackls="openstack stack show $1"
+alias stackxl="openstack stack failures list --long $1"
+alias stackpeep="while [$(openstack stack show $1 | grep status -eq "CREATE_COMPLETE")]; do sleep 1; done"
+alias stackpeep2="for i in $(openstack stack show $1 | grep 'stack_name' | awk '{print $4}'); do openstack stack resource show $1 $i; done"
+#List Severs, Find Sevrer, Server Console Logs, Server URL, Watch Sever Logs, 
+alias lssvr="openstack server list"
+alias svrIP="openstack server list -c Name -c ID -c Networks -f value | grep $1 "
+alias svrurl="openstack console url show $1 --spice"
+alias svrlog="openstack console log show $1"
+alias findsvr="openstack server list  | grep $1 "
+alias svrls="openstack server show $1"
+alias svrIP="openstack server list -c Name -c ID -c Networks -f value | grep $1"
+alias rebootsvr='openstack server reboot $1'
+
+alias svrlog_tf=' for ((i=0;i<=50;++i));do svrlog $i > svrlog; cat svrlog | tail -20; rm -rf svrlog; printf %s"\n\n\n (╯°□°）╯︵ ┻━┻ \n\n\n"; done'
