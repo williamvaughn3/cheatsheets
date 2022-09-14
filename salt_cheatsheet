@@ -1,0 +1,110 @@
+Salt Cheat Sheet
+---
+syntax: bash
+tags: [ salt, saltstack ]
+---
+
+# Salt call Highstate with debug
+salt-call -l debug state.highstate
+
+# Show pending keys to be accepted:
+salt-key -L
+
+# Salt Minion test
+ salt-call state.enable salt.minion-state-apply-test
+
+# Accept all pending keys:
+salt-key -A
+
+# Accept pending key by name:
+salt-key -a target
+
+# Remove key by name:
+salt-key -D target
+
+
+# Test minion connection:
+salt target test.ping
+
+# Show active salt jobs
+salt-run jobs.active
+
+# Kill active job
+salt target saltutil.kill_job job_id
+
+# Copy small file (< 100kb) from master to minion
+salt-cp target source dest
+
+# Copy large file from master (/srv/salt/<source>) directory to minion
+salt target cp.get_file salt://source destination
+
+# Copy file from minion to master (will be stored at /var/cache/salt/master/minions/<minion_name>/files
+salt target cp.push source
+
+# Deploy state
+salt target state.apply state_name
+salt '*' sys.doc
+
+#All sys.doc
+salt '*' sys.doc pkg
+
+#sys.doc for pkg
+salt '*' sys.doc network
+
+#sys.doc for network
+salt '*' sys.doc system
+
+#sys.doc for system
+salt '*' sys.doc status
+
+#sys.doc for module status
+salt '*' grains.ls
+
+#List all grains on all minions
+salt '*' grains.item os
+
+#Value of OS grain for every minion
+salt '*' grains.item roles
+
+#Value of roles grain for every minion
+salt-run manage.status
+
+#Minion status (both up and down)
+salt-run manage.up
+
+#Show minions that are up
+salt-run manage.down
+
+#Show minions that are down
+salt '*' test.ping
+
+#Use test module to test minions
+salt 'min*' system.reboot
+
+#reboot minions min*
+salt '*' status.uptime
+
+#get uptime of all minions
+salt '*' pkg.list_upgrades
+
+#list packages that need upgrade
+salt '*' pkg.version bash
+
+#get version of bash package
+salt '*' pkg.install bash
+
+#install/upgrade bash package
+salt '*' pkg.install bash refresh=True
+
+#install/upgrade but refresh package database
+salt '*' service.status servicename
+
+#Service status
+salt '*' service.all variable servicename
+#Service available
+salt '*' service.start servicename
+Service start
+salt '*' service.restart servicename
+Service restart
+salt '*' service.stop servicename
+#Service stop
