@@ -70,21 +70,35 @@ salt '*' grains.item roles
 salt-run manage.status
 
 # Minion status 
+
 salt-run manage.up
+
 salt-run manage.down
+
 salt '*' test.ping
+
 salt 'min*' system.reboot
+
 salt '*' status.uptime
 
 # Packages
+
 salt '*' pkg.list_upgrades
+
 salt '*' pkg.version bash
+
 salt '*' pkg.install bash
+
 salt '*' pkg.install bash refresh=True
 
 # Services
+
 salt '*' service.status servicename
+
 salt '*' service.all variable servicename
+
 salt '*' service.start servicename
+
 salt '*' service.restart servicename
+
 salt '*' service.stop servicename
