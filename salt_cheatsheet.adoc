@@ -45,66 +45,46 @@ salt target cp.push source
 salt target state.apply state_name
 salt '*' sys.doc
 
-#All sys.doc
+# All sys.doc
 salt '*' sys.doc pkg
 
-#sys.doc for pkg
+# sys.doc for pkg
 salt '*' sys.doc network
 
-#sys.doc for network
+# sys.doc for network
 salt '*' sys.doc system
 
-#sys.doc for system
+# sys.doc for system
 salt '*' sys.doc status
 
-#sys.doc for module status
+# sys.doc for module status
 salt '*' grains.ls
 
-#List all grains on all minions
+# List all grains on all minions
 salt '*' grains.item os
 
-#Value of OS grain for every minion
+# Value of OS grain for every minion
 salt '*' grains.item roles
 
-#Value of roles grain for every minion
+# Value of roles grain for every minion
 salt-run manage.status
 
-#Minion status (both up and down)
+# Minion status 
 salt-run manage.up
-
-#Show minions that are up
 salt-run manage.down
-
-#Show minions that are down
 salt '*' test.ping
-
-#Use test module to test minions
 salt 'min*' system.reboot
-
-#reboot minions min*
 salt '*' status.uptime
 
-#get uptime of all minions
+# Packages
 salt '*' pkg.list_upgrades
-
-#list packages that need upgrade
 salt '*' pkg.version bash
-
-#get version of bash package
 salt '*' pkg.install bash
-
-#install/upgrade bash package
 salt '*' pkg.install bash refresh=True
 
-#install/upgrade but refresh package database
+# Services
 salt '*' service.status servicename
-
-#Service status
 salt '*' service.all variable servicename
-#Service available
 salt '*' service.start servicename
-Service start
 salt '*' service.restart servicename
-Service restart
 salt '*' service.stop servicename
-#Service stop
