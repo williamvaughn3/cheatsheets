@@ -104,7 +104,7 @@ curl -X POST https://reqbin.com/echo/post/json
 
     for i in seq {1..3834}; do curl -s http://127.0.0.1/cache --cookie cookie.txt -d deleteone=files -A "My New User-Agent"; done
 
-#    Now we just need to upload armed.fusion.bomb. Let's start by enumeratinghe upload form field at:
+#    Now we just need to upload file enumerating the upload form field at:
 curl -u ftpuser:ftppass ftp://127.0.0.1/ -Q '-*DELE file1'
 curl -D - http://127.0.0.1 -c cookie.txt
 
