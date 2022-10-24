@@ -259,12 +259,7 @@ NT\DNSClient" -Name "EnableMulticast" -Type DWord -Value 0
 
 # Scan for Neighbors from CAM table
 $Results = Invoke-Command -ComputerName $ComputerList -ScriptBlock {
-    Get-NetNeighbor -AddressFamily IPv4 | Where-Object
-    {$_.LinkLayerAddress -notlike "01-00-5E*" -and $_.LinkLayerAddress -
-    notlike "FF-FF-FF-FF-FF-FF"} }
+    Get-NetNeighbor -AddressFamily IPv4 | Where-Object {$_.LinkLayerAddress -notlike "01-00-5E*" -and $_.LinkLayerAddress -notlike "FF-FF-FF-FF-FF-FF"} }
 
 # Software inventory with Powershell
-    @("HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*","HKLM
-    :\SOFTWARE\Wow6432node\Microsoft\Windows\CurrentVersion\Uninstall\*")
-    | ForEach-Object { Get-ItemProperty "$_" | Select-Object
-    DisplayName,PSChildName,Publisher,InstallLocation}
+    @("HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*","HKLM:\SOFTWARE\Wow6432node\Microsoft\Windows\CurrentVersion\Uninstall\*")| ForEach-Object { Get-ItemProperty "$_" | Select-Object DisplayName,PSChildName,Publisher,InstallLocation}
