@@ -263,3 +263,19 @@ $Results = Invoke-Command -ComputerName $ComputerList -ScriptBlock {
 
 # Software inventory with Powershell
     @("HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*","HKLM:\SOFTWARE\Wow6432node\Microsoft\Windows\CurrentVersion\Uninstall\*")| ForEach-Object { Get-ItemProperty "$_" | Select-Object DisplayName,PSChildName,Publisher,InstallLocation}
+
+# Scan for ports
+    $ips = @("172.25.17.14","172.25.17.15")
+    $ips | ForEach-Object { $ip=$_; 5585..5586 | ForEach-Object { Test-NetConnection -ComputerName $ip -Port $_ -InformationLevel Quiet }}
+
+# Scan for UDP ports 
+$ips | ForEach-Object { $ip =$_; $UDP = New-Object System.Net.Sockets.UdpClient($ip); $UDP.Connect($ip,$_)
+
+#send data to seim
+Invoke-RestMethod -Uri "https://<url>/api/ingest" -Method Post -Body $json -ContentType "application/json" 
+function Send-Syslog ($message) {
+    $socket = new-object System.Net.Sockets.TCPClient("10.10.10.10","514")
+    $tcpstream = $socket.getstream()
+    $streamwriter = new-object System.IO.StreamWriter($tcpstream)
+    $streamwriter.WriteLine($message)
+    $streamwriter.flush();$tcpstream.close();$socket.close()
