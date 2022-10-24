@@ -1,16 +1,15 @@
 
-
 # Powershell find string in file
-gci -Recurse | Select-String -Pattern "wiki" | Select-Object Path, LineNumber, Pattern
+Get-ChildItem -Recurse | Select-String -Pattern "wiki" | Select-Object Path, LineNumber, Pattern
 
 # Powershell Get Hash of file
 Get-FileHash -Path "/Windows/Windows/System32/ar-SA/access_log" -Algorithm MD5
 
 # Powershell Count objects 
-(gci -Path /Windows -Recurse -Directory).length
+(Get-ChildItem -Path /Windows -Recurse -Directory).length
 
 # Powershell Get the Creation time of a file
-(gci -Recurse | Select-String -Pattern "wiki"| Select-Object -First 1).Path | Get-ItemProperty | Select-Object creationtime 
+(Get-ChildItem-ChildItem -Recurse | Select-String -Pattern "wiki"| Select-Object -First 1).Path | Get-ItemProperty | Select-Object creationtime 
 
 # Powershell Expand Commandline history
 Get-History -id 10 | Select-Object -ExpandProperty CommandLine
@@ -20,7 +19,8 @@ Set-Variable -Name "myvar" -Value "myvalue"
 
 # PowershellBase64 decode
 [System.Convert]::FromBase64String( "BASE64_HERE" )
-[System.Text.Encoding]::UTF8.GetString( ) #to convert from bytes to string.
+# to convert from bytes to string.
+[System.Text.Encoding]::UTF8.GetString( ) 
 [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String(((Get-History)[9].Commandline).split('"')[1]))
 
 # Powershell View all atributes
@@ -35,10 +35,10 @@ Expand-Archive /Windows/Windows/System32/winevt/Logs/Security.zip -DestinationPa
 # Powershell Find total Logs in file
 (Import-Clixml /tmp/security.xml).length 
 $logs = (Import-Clixml /tmp/logs/Security.xml)
-(($logs).Id | select -uniq).length
+(($logs).Id | Select-Object-Object -uniq).length
 
 # PowershellFind value based on object property
-($logs | where -Value "4444" -CEQ ID).Properties
+($logs | Where-Object -Value "4444" -CEQ ID).Properties
 
 # Powershell header inspection
 foreach ($i in (1..50))  { 
@@ -48,6 +48,7 @@ foreach ($i in (1..50))  {
        Write-Host $res
        break
     }
+}
  
 # PowershellPowershell Read Stream
     $tcpClient = [Net.Sockets.TcpClient]::new("127.0.0.1", "55555")
@@ -108,7 +109,7 @@ Start-Process -verb runas -FilePath "process name"
 
 ## show hidden files
 # Get-ChildItem show hidden files (gci shorthand for Get-ChildItem)
-gci -Force
+Get-ChildItem-ChildItem -Force
 
 # Retrieve name of the registry provider PSDrive (PSDrive is a drive that is mapped to a provider)
 Get-PSDrive -PSProvider Registry "name" | format-list * -Force
@@ -131,40 +132,35 @@ $collection = @(
         Name = "Name3"
     }
 )
-
 # return number of items in collection using array property
 $collection | Measure-Object -Property "array property" | Select-Object -Property Count
 
-## Alternate file stream (AFS) is a feature of NTFS that allows you to store additional data in a file.
-# 	Description 	    Introduced in 	Write Cmdlet
-# 	Success stream 	    PowerShell 2.0 	Write-Output
-# 	Error stream 	    PowerShell 2.0 	Write-Error
-# 	Warning stream 	    PowerShell 2.0 	Write-Warning
-# 	Verbose stream 	    PowerShell 2.0 	Write-Verbose
-# 	Debug stream     	PowerShell 2.0 	Write-Debug
-# 	Information stream 	PowerShell 5.0 	Write-Information
-# 	Progress stream 	PowerShell 2.0 	Write-Progress
+# Range Operator character
+.. (double dot)
+
+# Alternate file stream (AFS) is a feature of NTFS that allows you to store additional data in a file.
+	ads_Description  	    Introduced in 	Write-Cmdlet
+	ads_Success stream, 	    PowerShell 2.0, 	Write-Output
+	ads_Error stream, 	    PowerShell 2.0, 	Write-Error
+	ads_Warning stream, 	    PowerShell 2.0, 	Write-Warning
+	ads_Verbose stream, 	    PowerShell 2.0, 	Write-Verbose
+	ads_Debug stream,     	PowerShell 2.0, 	Write-Debug
+	ads_Information stream, 	PowerShell 5.0, 	Write-Information
+	ads_Progress stream, 	PowerShell 2.0, 	Write-Progress
 
 # Create function and run it
-function function-name {
+function function-name1 {
     "function body"
 }
-function-name
+function-name1
 
 # Find invoke-command paramaters
 Get-Help Invoke-Command -Parameter * 
 #build in powershell variables local
-
-#####
-# Powershell env 
-#####
-# Version
 write-host "version of powershell"
 $PSVersionTable
-# Edition
 write-host "edition of powershell"
 $PSEdition
-# Home
 write-host "location of powershell" 
 $PSHOME             
 write-host "location of powershell command"
@@ -173,9 +169,9 @@ $PSCommandPath
 $PSModulePath
 $PSVersionTable
 
-## Set-StrictMode - Use Set-StrictMode to quickly find errors in your scripts
-# Set-StrictMode -Version Latest
-# Set-StrictMode -Off
+# Set-StrictMode - Use Set-StrictMode to quickly find errors in your scripts
+Set-StrictMode -Version Latest
+Set-StrictMode -Off
 
 #Create self-signed certificate
 
@@ -215,112 +211,60 @@ Get-WinEvent -Path C:\temp\bits_openvpn.evtx -FilterXPath '*[EventData[(Data[@Na
 
 # Powershell get-winevent show completed bits jobs for owner and count
 Invoke-WebRequest -Uri 'https://github.com/imamimam/EVTX-ATTACK-SAMPLES-/raw/master/Lateral Movement/LM_Remote_Service02_7045.evtx' -OutFile .\log.evtx
-https://<URL>/win10-pfirewall.log
+https://<url>/win10-pfirewall.log
 
 # Powershell get-winevent show firewall log stuff
-Invoke-WebRequest -Uri https://<URL>/win10-pfirewall.log -OutFile C:\temp\win10-pfirewall.log
+Invoke-WebRequest -Uri https://<url>/win10-pfirewall.log -OutFile C:\temp\win10-pfirewall.log
 PS C:\Scripts>  $fwLog | Where-Object {$_.action -ne "DROP"} | Group-Object -Property 'dst-port' -NoElement |Sort-Object -Property Count -Descending    
 $fwLog = Get-Content C:\Temp\win10-pfirewall.log -ReadCount 1000 | ConvertFrom-Csv -Delimiter ' ' -Header @("date","time","action","protocol","src-ip","dst-ip","src-port","dst-port","size","tcpflags","tcpsyn","tcpack","tcpwin","icmptype","icmpcode","info","path")
 $fwLog | Where-Object {$_.action -eq "ALLOW"}  | Group-Object -Property dst-port | sort -Descending -Property count
 
 
-
-# Download and inspect the Kibana logs at:
-invoke-webrequest -uri https://<URL>/kibana.log -outfile C:\temp\kibana.log
+# Download and inspect the Kibana logs at: https://<url>/kibana.log
+invoke-webrequest -uri https://<url>/kibana.log -outfile C:\temp\kibana.log
 $KL = Get-Content C:\temp\kibana.log
 $Responses = $KL | ConvertFrom-Json  
 $Responses.res.responseTime | Measure-Object -Maximum -Minimum -Average -Sum -StandardDeviation
 Count             : 13
-# Should be 52
 Average           : 52.1538461538462
 Sum               : 678
 Maximum           : 245
 Minimum           : 3
 StandardDeviation : 85.1076241726186
 
-#This seems wrong?
 $responseTime = @()
 Get-Content C:\temp\kibana.log |Select-String -Pattern "`"responseTime`":(\d?)" |ForEach-Object {$responseTime += $_.Matches.Groups[1].Value} 
 $responseTime | Measure-Object -Average
-# Returns 4. something
-######################################################
 
 # Extract http://ip:port from the logs
 $JL = Get-Content C:\scripts\json.test | ConvertFrom-Json
 $JL.Message | Out-String | Select-String -Pattern "(?<serverAddr>http?:\/\/((?:[0-9'.']{1,20})[':'])?([0-9]{1,5}))" -AllMatches | ForEach-Object {$_.Matches.Groups[0].Value} | write-host
+
 # View Header data from Invoke-WebRequest
-$gcout = invoke-webrequest -uri https://www.sans.org -Headers @{"User-Agent"="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101 Firefox/68.0"} | Select-Object -Property Headers
-$myResult = $gcout.headers."X-Content-Type-Options"
+$MyRequest = invoke-webrequest -uri https://www.sans.org -Headers @{"User-Agent"="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101 Firefox/68.0"} | Select-Object -Property Headers
+$myResult = $MyRequest.headers.X # -Content -Type -Options
+
 # View Header data from Invoke-WebRequest
-Invoke-PowerPlayAnswer -Question "xcto" -Answer $myResult
+Invoke-PowerPlayAnswer -Question "xcto" -Answer "nosniff"
 
+#Read registry property defining LLMNR status
+$LLMNR = Get-ItemProperty -Path
+"HKLM:\Software\policies\Microsoft\Windows NT\DNSClient" | Select-
+Object -ExpandProperty EnableMulticast
+if($LLMNR -ne 0){
+#Disable LLMNR
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows
+NT\DNSClient" -Name "EnableMulticast" -Type DWord -Value 0
+}
 
-# Powershell API Post request
-$date = Get-Date -Format "yyyy-MM-dd"
-$uri = "http://isc.sans.edu/api/dailysummary/$date/$date?json"
-$iscd = invoke-webrequest -uri $uri -Method POST -UserAgent "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101" -Headers @{"Content-Type"="application/json"}      
-$recordsvalue  = $iscd | ConvertFrom-Json 
-$recordsvalue.records
+# Scan for Neighbors from CAM table
+$Results = Invoke-Command -ComputerName $ComputerList -ScriptBlock {
+    Get-NetNeighbor -AddressFamily IPv4 | Where-Object
+    {$_.LinkLayerAddress -notlike "01-00-5E*" -and $_.LinkLayerAddress -
+    notlike "FF-FF-FF-FF-FF-FF"} }
 
-$currentDate = get-date -format "yyyy-MM-dd"
-$httpRes = Invoke-RestMethod -Uri https://isc.sans.edu/api/dailysummary/$($currentDate)/$($currentDate)?json
-Invoke-PowerPlayAnswer -Question "isc" -Answer ($httpRes.records)
-
-#Invoke-Webrequest with JSON api call Post body section=integrations, question=customApicall, GUID=Guid
-$uri = "https://<URL>/api/ctf"
-$guid = "e621f6ee-7270-4fdc-872f-eee40afc194d"
-$toSon = @{ Section = "Integrations"
-            Question = "CustomAPICall"
-            GUID = "$guid" } | ConvertTo-Json
-$flag = Invoke-Webrequest -uri $uri -Method POST -Body $toSon -ContentType "application/json"
-$flag.RawContent 
-
-$body = @{"Section"="Integrations";"Question"="CustomAPICall";"GUID"="e621f6ee-7270-4fdc-872f-eee40afc194d"}
-Invoke-RestMethod -uri https://<URL>/api/ctf -Body ($body |ConvertTo-Json) -Method Post -ContentType "application/json"
-
-# Make REST API call to get the flag
-$uri = "https://<URL>/api/gethash" 
-$hash = Invoke-WebRequest -Uri $uri -Method POST -ContentType "application/json" 
-
-
-# EASY VirusTotal Stuff
-git clone https://github.com/EvotecIT/VirusTotalAnalyzer.git 
-cd VirusTotalAnalyzer
-Import-Module .\VirusTotalAnalyzer.psd1
-Import-Module .\VirusTotalAnalyzer.psm1
-# Get the hash from the API
-$VTApi = "insertkey"
-$T1 = Get-VirusReport -ApiKey $VTApi -Hash $hash -Verbose
-$T2 = Get-VirusReport -ApiKey $VTApi -File "$PSScriptRoot\Submisions\TestFile.txt"
-$T3 = Get-VirusReport -ApiKey $VTApi -DomainName 'evotec.xyz'
-$T4 = Get-VirusReport -ApiKey $VTApi -IPAddress '1.1.1.1'
-$T5 = Get-VirusReport -ApiKey $VTApi -Search "$hash"
-
-$T1.data.attributes.last_analysis_stats
-$T1.data.attributes | Select-Object -Property *
-# PositiveResults (MajicJohnson)
-$Magic_Johnson = $T5.data.attributes.last_analysis_stats.malicious
-$customObject = [PSCustomObject]@{ FileHash = "0ddfe002d78292772d1a52d829ea48aa"
-            Positives = $Magic_Johnson }
-
-$fileHash = Invoke-RestMethod -Uri https://<URL>/api/gethash
-$apiKey = $VTApi
-$uri = "https://www.virustotal.com/vtapi/v2/file/report?apikey=$apiKey&resource=$fileHash"
-$vtResults = Invoke-RestMethod -Uri $uri
-$myCustomObj=[pscustomobject]@{'FileHash'=$fileHash;'Positives'=$vtResults.Positives}
-Invoke-PowerPlayAnswer -Question "vthash" -Answer $myCustomObj
-
-# PowerShell form encoded post to API login
-$uri = "https://<URL>/api/login"
-$login = Invoke-WebRequest -Uri $uri -Method POST -Body "email=test%40a.a&pw=test&submit=login" -ContentType "application/x-www-form-urlencoded"
-$login.RawContent
-$loginctf = Invoke-WebRequest -Uri 'https://<URL>/api/login' -Method Post  -ContentType 'application/x-www-form-urlencoded' -Body 'email=test%40a.a&pw=abc&submit=login'
-
-$url = "https://<URL>/login.html"
-$site = Invoke-WebRequest -Uri $url
-$iscForm = $site.Forms | select -Last 1
-$iscForm.Fields["pw"] = "password"
-$iscForm.Fields["email"] = "somemail@domain.com"
-
-Invoke-RestMethod -Uri "https://<URL>/api/login" -Method $iscForm.
- -Body $iscForm.Fields -ContentType "application/x-www-form-urlencoded"
+# Software inventory with Powershell
+    @("HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*","HKLM
+    :\SOFTWARE\Wow6432node\Microsoft\Windows\CurrentVersion\Uninstall\*")
+    | ForEach-Object { Get-ItemProperty "$_" | Select-Object
+    DisplayName,PSChildName,Publisher,InstallLocation}
