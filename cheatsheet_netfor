@@ -1,10 +1,11 @@
-#---------------------------------------------------------------------------------------------------------------#
-#                               -- Network Forensics Command Cheatsheets --                                      #
-#---------------------------------------------------------------------------------------------------------------#
+#---------------------------------------------------------------------------------------------------------------
+#                               -- Network Forensics Command Cheatsheets --                                      
+#---------------------------------------------------------------------------------------------------------------
 
-#---------------------------------------------------------------------------------------------------------------#
+#---------------------------------------------------------------------------------------------------------------
 ## Log Parsing Commands
-#---------------------------------------------------------------------------------------------------------------#
+#---------------------------------------------------------------------------------------------------------------
+
 #Find all systems that requested a particular resource, aggregate by frequency and sort
 sudo grep "\"GET /resource" access_log | awk '{print $1}' | sort | uniq -c | sort -nr
 # Find all resources requested by the specified system
@@ -19,11 +20,13 @@ for file in $( grep -rail www.google-analytics.com ⏎
 /var/spool/squid/ ); do
 strings -n 10 $file | grep ^http | head -n 1;
 done
-#---------------------------------------------------------------------------------------------------------------#
 
-#---------------------------------------------------------------------------------------------------------------#
+#---------------------------------------------------------------------------------------------------------------
+
+#---------------------------------------------------------------------------------------------------------------
 ## TSHARK COMMANDS
-#---------------------------------------------------------------------------------------------------------------#
+#---------------------------------------------------------------------------------------------------------------
+
 # tshark number of URI finder
 tshark -r test.pcap -T fields -e http.request.uri | sort | uniq -c | sort -nr
 # tshark find number of http post requests
@@ -32,11 +35,13 @@ tshark -r test.pcap -T fields -e http.request.method -e http.request.method | gr
 tshark -r test.pcap -T fields -e frame.number -e http.request.method | grep -i post | sort | uniq -c | sort -nr
 # tshark follow stream of http post requests
 tshark -r test.pcap -T fields -e frame.number -e http.request.method | grep -i post | sort | uniq -c | sort -nr | awk '{print $2}' | xargs -I {} tshark -r test.pcap -Y "frame.number=={}" -V
-#---------------------------------------------------------------------------------------------------------------#
 
-#---------------------------------------------------------------------------------------------------------------#
+#---------------------------------------------------------------------------------------------------------------
+
+#---------------------------------------------------------------------------------------------------------------
 ## TCPDUMP
-#----------------------------------------------------------------------------------------------------------------#
+#----------------------------------------------------------------------------------------------------------------
+
 # Intercepts all packets from/to 1.2.3.4
 tcpdump host 1.2.3.4
 # Intercepts all packets on all interfaces from / to 1.2.3.4 port 80
@@ -74,19 +79,21 @@ tcpdump -X
 # List of acceptable match options:
 # - Port matching:  [ portrange 22-23, not port 22, port ssh, dst port 22, src port 22 ]
 # - Host matching:  [ dst host 8.8.8.8 ,not dst host 8.8.8.8 ,src net 67.207.148.0 mask 255.255.255.0 ,src net 67.207.148.0/24 ]
-#---------------------------------------------------------------------------------------------------------------#
+
+#---------------------------------------------------------------------------------------------------------------
 
 
-#---------------------------------------------------------------------------------------------------------------#
+#---------------------------------------------------------------------------------------------------------------
 ## DNS Stuff
-#---------------------------------------------------------------------------------------------------------------#
+#---------------------------------------------------------------------------------------------------------------
 # passive DNS github 
 # https://github.com/gamelinux/passivedns
-#---------------------------------------------------------------------------------------------------------------#
+#---------------------------------------------------------------------------------------------------------------
 
-#---------------------------------------------------------------------------------------------------------------#
+#---------------------------------------------------------------------------------------------------------------
 ## Zeek Logs
-#---------------------------------------------------------------------------------------------------------------#
+#---------------------------------------------------------------------------------------------------------------
+
 # ts:
 #   DescriptiON: |
 #     "Timestamp for when the first packet of the exchange was observed, in UNIX epoch format with microsecond resolution."
@@ -101,12 +108,12 @@ tcpdump -X
 #   - id.resp_h: Responding IP address
 #   - id.orig_p: Originating port 
 #   - id.resp_p: Response port
-#
+
 ##                                                   Log File Format
 # Below is of one of the zeek logs (http.log) and associated fields, for the full list of logs and fields, see the link below
 # https://docs.zeek.org/en/current/scripts/base/protocols/http/main.zeek.html
 ##
-#
+
 # http.log:
 #   - trans_depth: Represents the pipelined depth into the connection of this request/response transaction.
 #   - method: The HTTP method used in the request.
@@ -129,15 +136,34 @@ tcpdump -X
 #   - orig_mime_types: "A list of MIME types associated with the files extracted from the request body."
 #   - resp_fuids: "A list of unique identifiers for the files extracted from the response body, can be cross-referenced with the files.log."
 #   - resp_mime_types: "A list of MIME types associated with the files extracted from the response body."
-#---------------------------------------------------------------------------------------------------------------#
 
-#---------------------------------------------------------------------------------------------------------------#
+# Zeek Communitiy ID String:
+#   ID_String: "version + ":" + base64( sha1( seed + source_address + destination_address + protocol + 0x00 + source_port +  destination_port ))"
+
+
+## zcat 
+##---------------------------------------------------------------------------------------------------------------
+# deals with compressed files
+
+# count the number of entryies in zeek log file
+zcat zeek.log-date*.gz | wc -l
+
+# Get the logs for a specific time period
+zcat zeek.log-date*.gz | awk -F '\t' '$1 >= 1580000000 && $1 <= 1580000000 {print $0}' > zeek.log-date-1580000000-1580000000
+
+
 ##  jq Tool (JSON)
-##---------------------------------------------------------------------------------------------------------------#
-# - Dealing with NSM logs from zeek, jq is a great tool to parse the logs
+##---------------------------------------------------------------------------------------------------------------
+# - Dealing with NSM logs from zeek,
 # - can use cat, read in redirection, or zcat to read in compressed files
 # - JQplay.org is a great tool to test out jq queries
-##----------------------------------------------------------------------------------------------------------------#
+#
+##  ***  "z"tools can be more performant in certain situations: example: jq.select() function vs zgrep   
+
+###          jq_example:
+###            syntax_example:  "jq [options] <filter> <input_file>"
+###            basic_options: [ -c: Compact output instead of “pretty-printed”,  -r: Raw output instead of quoted JSON text, -S: Sort output lexically based on key names ]
+
 # To pretty print the json:
 jq "." < filename.json
 # To access the value at key "foo":
@@ -160,4 +186,35 @@ jq '.foo[] | {field_1,field_2}'
 jq '.foo[] | {field_1,field_2} | join(" ")'
 # only print records where given field matches a value
 jq '.foo[] | select(.field_1 == "value_1")'
-#----------------------------------------------------------------------------------------------------------------#
+
+
+# use head and tail and time stamp to find covered periods 
+zcat 2022-02-09/dns.17\:00\:00-18\:00\:00.log.gz | head -n 1 | jq -cr '.ts |= todate | .ts'
+zcat 2022-02-10/dns.14\:00\:00-15\:00\:00.log.gz | tail -n 1 | jq -cr '.ts |= todate | .ts'
+
+# return the response code names and count
+zcat 2022-02-*/dns.*.gz | jq -r '.rcode_name' | sort | uniq -c | sort -nr | head -n 20
+
+# find the query that did not return a response
+zcat 2022-02-*/dns.*.gz | jq -cr 'select(.rcode_name != "NOERROR") | { qtype_name, rcode_name }'  | sort | uniq -c | sort -nr
+
+# get the top 10 domains queried
+zcat 2022-02-*/dns.*.gz | jq -cr '.qclass_name, .qtype_name, .query' | sort | uniq -c | sort -nr | head -n 10
+
+# get the results of queries matching origin IP 1.2.3.4, and 4.3.2.1 with rcode_name"NXDOMAIN"
+zcat 2022-02-*/dns.*.gz | jq -cr 'select((."id.orig_h" == "1.2.3.4" or ."id.orig_h" == "4.3.2.1") and .rcode_name == "NXDOMAIN") | .ts |= todate | { ts, "id.orig_h", query }'
+
+
+# things_to_look_for_for_triage:
+#   - high number of NXDOMAIN entries
+#   - number of PTR records compared to the overall number of records
+#   - Excessive or High number of queries not normally seen in the environment (ex: 1000+ queries for a single domain, or 1000+ queries for a single IP, ect)
+#   - Exessive or High number of responses (SERVFAIL, NXDOMAIN, REFUSED, ect)
+#   - list of top-queried hostnames for comparison to baseline (hueristical analysis)
+#   - list of top-queried domains for comparison to baseline (hueristical analysis)
+#   - list of top-queried hostnames resolved into IP addresses for comparison to baseline (hueristical analysis)
+#   - odd or abnormal queries (www/http permutations, or permutations either common domains or common TLDs, string abnormalties, etc)
+#   
+#----------------------------------------------------------------------------------------------------------------
+
+
