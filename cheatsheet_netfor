@@ -188,22 +188,6 @@ jq '.foo[] | {field_1,field_2} | join(" ")'
 jq '.foo[] | select(.field_1 == "value_1")'
 
 
-# use head and tail and time stamp to find covered periods 
-zcat 2022-02-09/dns.17\:00\:00-18\:00\:00.log.gz | head -n 1 | jq -cr '.ts |= todate | .ts'
-zcat 2022-02-10/dns.14\:00\:00-15\:00\:00.log.gz | tail -n 1 | jq -cr '.ts |= todate | .ts'
-
-# return the response code names and count
-zcat 2022-02-*/dns.*.gz | jq -r '.rcode_name' | sort | uniq -c | sort -nr | head -n 20
-
-# find the query that did not return a response
-zcat 2022-02-*/dns.*.gz | jq -cr 'select(.rcode_name != "NOERROR") | { qtype_name, rcode_name }'  | sort | uniq -c | sort -nr
-
-# get the top 10 domains queried
-zcat 2022-02-*/dns.*.gz | jq -cr '.qclass_name, .qtype_name, .query' | sort | uniq -c | sort -nr | head -n 10
-
-# get the results of queries matching origin IP 1.2.3.4, and 4.3.2.1 with rcode_name"NXDOMAIN"
-zcat 2022-02-*/dns.*.gz | jq -cr 'select((."id.orig_h" == "1.2.3.4" or ."id.orig_h" == "4.3.2.1") and .rcode_name == "NXDOMAIN") | .ts |= todate | { ts, "id.orig_h", query }'
-
 
 # things_to_look_for_for_triage:
 #   - high number of NXDOMAIN entries
@@ -215,6 +199,38 @@ zcat 2022-02-*/dns.*.gz | jq -cr 'select((."id.orig_h" == "1.2.3.4" or ."id.orig
 #   - list of top-queried hostnames resolved into IP addresses for comparison to baseline (hueristical analysis)
 #   - odd or abnormal queries (www/http permutations, or permutations either common domains or common TLDs, string abnormalties, etc)
 #   
+
+# use head and tail and time stamp to find covered periods 
+zcat 2022-02-09/dns.17\:00\:00-18\:00\:00.log.gz | head -n 1 | jq -cr '.ts |= todate | .ts'
+zcat 2022-02-10/dns.14\:00\:00-15\:00\:00.log.gz | tail -n 1 | jq -cr '.ts |= todate | .ts'
+# return the response code names and count
+zcat 2022-02-*/dns.*.gz | jq -r '.rcode_name' | sort | uniq -c | sort -nr | head -n 20
+# find the query that did not return a response
+zcat 2022-02-*/dns.*.gz | jq -cr 'select(.rcode_name != "NOERROR") | { qtype_name, rcode_name }'  | sort | uniq -c | sort -nr
+# get the top 10 domains queried
+zcat 2022-02-*/dns.*.gz | jq -cr '.qclass_name, .qtype_name, .query' | sort | uniq -c | sort -nr | head -n 10
+# find entries matching a specific ip
+zgrep -h 1.2.3.4 2022-02-*/dns.*.gz | jq -cr '.query'
+# find entries matching a specific domain
+zgrep -h "example.com" 2022-02-*/dns.*.gz | jq -cr '.query'
+# look for a specific query type
+zgrep -h "A" 2022-02-*/dns.*.gz | jq -cr '.query'
+# look for a specific query class
+zgrep -h "IN" 2022-02-*/dns.*.gz | jq -cr '.query'
+# look for a specific response code
+zgrep -h "NXDOMAIN" 2022-02-*/dns.*.gz | jq -cr '.query'
+# find all response codes that match specific query type from ip 1.2.3.4
+zgrep -h 2022-02-*/dns.*.gz | jq -cr 'select((.query == "1.2.3.4") and (.qtype_name == "A")) | .rcode_name' | sort | uniq -c | sort -nr
+# find all response codes that match specific query type from domain example.com
+zgrep -h 2022-02-*/dns.*.gz | jq -cr 'select((.query == "example.com") and (.qtype_name == "A")) | .rcode_name' | sort | uniq -c | sort -nr
+# find all entries that match a specific network range
+zgrep -h 2022-02-*/dns.*.gz | jq -cr 'select(.query | startswith("1.2.3.")) | .query' | sort | uniq -c | sort -nr
+# find all responses from specific network range
+zgrep -h 2022-02-*/dns.*.gz | jq -cr 'select(.answers | any(.data | startswith("1.2.3."))) | .query' | sort | uniq -c | sort -nr
+# get the results of queries matching origin IP 1.2.3.4, and 4.3.2.1 with rcode_name"NXDOMAIN"
+zcat 2022-02-*/dns.*.gz | jq -cr 'select((."id.orig_h" == "1.2.3.4" or ."id.orig_h" == "4.3.2.1") and .rcode_name == "NXDOMAIN") | .ts |= todate | { ts, "id.orig_h", query }'
+
+
 #----------------------------------------------------------------------------------------------------------------
 
 
