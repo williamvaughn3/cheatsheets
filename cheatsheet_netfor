@@ -1,0 +1,163 @@
+#---------------------------------------------------------------------------------------------------------------#
+#                               -- Network Forensics Command Cheatsheets --                                      #
+#---------------------------------------------------------------------------------------------------------------#
+
+#---------------------------------------------------------------------------------------------------------------#
+## Log Parsing Commands
+#---------------------------------------------------------------------------------------------------------------#
+#Find all systems that requested a particular resource, aggregate by frequency and sort
+sudo grep "\"GET /resource" access_log | awk '{print $1}' | sort | uniq -c | sort -nr
+# Find all resources requested by the specified system
+sudo grep "^1.2.3.4" access_log | awk '{print $7}' | sort | uniq -c | sort -nr
+# group by hour
+sudo grep "^1.2.3.4" access_log | awk '{print $4,$7}'| sed -e 's/\[\([0-9]\{2\}\/[A-Za-z]\{3\}\/[0-9]\{4\}\):\([0-9]\{2\}\)[0-9:]\{6\} \(.*\)/\1 \2:00:00+ \3/' | sort | uniq -c | sort -nr
+# identify all requestors that triggered server errors, include the request URI
+sudo cat access_log | awk '{print $9,$1,$7}' | egrep "^5[0-9]{2}" | sort | uniq -c | sort -nr
+
+# Grep through files in logs directory for a string
+for file in $( grep -rail www.google-analytics.com ⏎
+/var/spool/squid/ ); do
+strings -n 10 $file | grep ^http | head -n 1;
+done
+#---------------------------------------------------------------------------------------------------------------#
+
+#---------------------------------------------------------------------------------------------------------------#
+## TSHARK COMMANDS
+#---------------------------------------------------------------------------------------------------------------#
+# tshark number of URI finder
+tshark -r test.pcap -T fields -e http.request.uri | sort | uniq -c | sort -nr
+# tshark find number of http post requests
+tshark -r test.pcap -T fields -e http.request.method -e http.request.method | grep -i post | sort | uniq -c | sort -nr
+# tshark get frame number of http post requests
+tshark -r test.pcap -T fields -e frame.number -e http.request.method | grep -i post | sort | uniq -c | sort -nr
+# tshark follow stream of http post requests
+tshark -r test.pcap -T fields -e frame.number -e http.request.method | grep -i post | sort | uniq -c | sort -nr | awk '{print $2}' | xargs -I {} tshark -r test.pcap -Y "frame.number=={}" -V
+#---------------------------------------------------------------------------------------------------------------#
+
+#---------------------------------------------------------------------------------------------------------------#
+## TCPDUMP
+#----------------------------------------------------------------------------------------------------------------#
+# Intercepts all packets from/to 1.2.3.4
+tcpdump host 1.2.3.4
+# Intercepts all packets on all interfaces from / to 1.2.3.4 port 80
+# -nn => Disables name resolution for IP addresses and port numbers.
+tcpdump -nn -i any host 1.2.3.4 and port 80
+# Make a grep on tcpdump (ASCII)
+# -A  => Show only ASCII in packets.
+# -s snaplen => Capture only snaplen bytes of data from each packet.
+#    By default, tcpdump captures 262144 bytes.
+#    Packets truncated because of a limited snapshot are indicated in the
+#    output with '[|protocol]'.
+tcpdump -i any -A host 1.2.3.4 and port 80 | grep 'User-Agent'
+# With ngrep
+# -d eth0 => To force eth0 (else ngrep work on all interfaces)
+# -s0 => force ngrep to look at the entire packet. (Default snaplen: 65536 bytes)
+ngrep 'User-Agent' host 1.2.3.4 and port 80
+
+# Intercepts all packets on all interfaces from / to 8.8.8.8 or 1.2.3.4 on port 80
+tcpdump 'host ( 8.8.8.8 or 1.2.3.4 ) and port 80' -i any
+# Intercepts all packets SYN and FIN of each TCP session.
+tcpdump 'tcp[tcpflags] & (tcp-syn|tcp-fin) != 0'
+# To display SYN and FIN packets of each TCP session to a host that is not on our network
+tcpdump 'tcp[tcpflags] & (tcp-syn|tcp-fin) != 0 and not src and dst net local_addr'
+# To display all IPv4 HTTP packets that come or arrive on port 80 and that contain only data (no SYN, FIN no, no packet containing an ACK)
+tcpdump 'tcp port 80 and (((ip[2:2] - ((ip[0]&0xf)<<2)) - ((tcp[12]&0xf0)>>2)) != 0)'
+# Saving captured data
+tcpdump -w file.cap
+# Reading from capture file
+tcpdump -r file.cap
+# Show content in hexa # Change -x to -xx => show extra header (ethernet).
+tcpdump -x
+# Show content in hexa and ASCII # Change -X to -XX => show extra header (ethernet).
+tcpdump -X
+
+# List of acceptable match options:
+# - Port matching:  [ portrange 22-23, not port 22, port ssh, dst port 22, src port 22 ]
+# - Host matching:  [ dst host 8.8.8.8 ,not dst host 8.8.8.8 ,src net 67.207.148.0 mask 255.255.255.0 ,src net 67.207.148.0/24 ]
+#---------------------------------------------------------------------------------------------------------------#
+
+
+#---------------------------------------------------------------------------------------------------------------#
+## DNS Stuff
+#---------------------------------------------------------------------------------------------------------------#
+# passive DNS github 
+# https://github.com/gamelinux/passivedns
+#---------------------------------------------------------------------------------------------------------------#
+
+#---------------------------------------------------------------------------------------------------------------#
+## Zeek Logs
+#---------------------------------------------------------------------------------------------------------------#
+# ts:
+#   DescriptiON: |
+#     "Timestamp for when the first packet of the exchange was observed, in UNIX epoch format with microsecond resolution."
+# uid:
+#   Description: |
+#     "Unique ID for the connection. This is an excellent pivot point for cross-referencing multiple HTTP request/responses that occur within a single connection, such as when using Keep-Alive. 
+#      Also useful to cross-reference entries in multiple log files."
+# id:
+#   Description: |
+#     "A superfield containing the connection's 4-tuple of endpoint addresses/ports."
+#   - id.orig_h: Originating IP address
+#   - id.resp_h: Responding IP address
+#   - id.orig_p: Originating port 
+#   - id.resp_p: Response port
+#
+##                                                   Log File Format
+# Below is of one of the zeek logs (http.log) and associated fields, for the full list of logs and fields, see the link below
+# https://docs.zeek.org/en/current/scripts/base/protocols/http/main.zeek.html
+##
+#
+# http.log:
+#   - trans_depth: Represents the pipelined depth into the connection of this request/response transaction.
+#   - method: The HTTP method used in the request.
+#   - host: The value of the "Host:" header in the request. 
+#   - uri: "The URI requested, including any query string."
+#   - referrer: "value of the "Referer:" header in the request." 
+#   - user_agent: "value of the "User-Agent:" header in the request."
+#   - request_body_len: "Length of the request body in bytes. This is the length of the body after any content decoding has been applied."
+#   - response_body_len: "Length of the response body in bytes. This is the length of the body after any content decoding has been applied."
+#   - status_code: "The HTTP status code returned in the response."
+#   - status_msg: "The HTTP status message returned in the response."
+#   - info_code: "The HTTP informational status code returned in the response."
+#   - info_msg: "The HTTP informational status message returned in the response."
+#   - filename: "The filename extracted from the URI, if any, content-disposition, or content-type."
+#   - tags: "A list of tags applied to the connection."
+#   - username: "The username extracted from the URI, if any, basic authentication,"
+#   - password: "The password extracted from the URI, if any basic authentication."
+#   - proxied: "Indicates whether the request was proxied through a transparent proxy."
+#   - orig_fuids: "A list of unique identifiers for the files extracted from the request body, can be cross-referenced with the files.log."
+#   - orig_mime_types: "A list of MIME types associated with the files extracted from the request body."
+#   - resp_fuids: "A list of unique identifiers for the files extracted from the response body, can be cross-referenced with the files.log."
+#   - resp_mime_types: "A list of MIME types associated with the files extracted from the response body."
+#---------------------------------------------------------------------------------------------------------------#
+
+#---------------------------------------------------------------------------------------------------------------#
+##  jq Tool (JSON)
+##---------------------------------------------------------------------------------------------------------------#
+# - Dealing with NSM logs from zeek, jq is a great tool to parse the logs
+# - can use cat, read in redirection, or zcat to read in compressed files
+# - JQplay.org is a great tool to test out jq queries
+##----------------------------------------------------------------------------------------------------------------#
+# To pretty print the json:
+jq "." < filename.json
+# To access the value at key "foo":
+jq '.foo'
+# To access first list item:
+jq '.[0]'
+# to slice and dice:
+jq '.[2:4]'
+jq '.[:3]'
+jq '.[-2:]'
+# to extract all keys from json:
+jq keys
+# to sort by a key:
+jq '.foo | sort_by(.bar)'
+# to count elements:
+jq '.foo | length'
+# print only selected fields:
+jq '.foo[] | {field_1,field_2}'
+# print selected fields as text instead of json:
+jq '.foo[] | {field_1,field_2} | join(" ")'
+# only print records where given field matches a value
+jq '.foo[] | select(.field_1 == "value_1")'
+#----------------------------------------------------------------------------------------------------------------#
