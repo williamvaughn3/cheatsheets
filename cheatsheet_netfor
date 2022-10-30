@@ -243,59 +243,45 @@ zcat 2022-02-*/dns.*.gz | jq -cr 'select((."id.orig_h" == "1.2.3.4" or ."id.orig
 
 # covnert pcap to nfcapd format
 nfpcapd -r /path/to/pcap/file.pcap -l /path/to/nfcapd/file
-
 # wrete compressed output in date-hashed format of pcap
 nfpcap -r /path/to/pcap/file.pcap -S 1 -z -l /path/to/nfcapd/
-
 # nfdump to read the nfcapd file
 nfdump -r /path/to/nfcapd/nfcapd.date
-
 # nfdump to read all files in directory
 nfdump -R /path/to/nfcapd/
 
 ## nfdump filters
 
-
 # nfdump by protocol 
 nfdump -r file -p (tcp|udp|icmp|arp|igmp|ip|ip6|gre|esp|ah|sctp|all)
-
 # nfdump by ip address
 nfdump -r file -a (src|dst) (ip|net)
-
 # nfdump by tcp flags
 nfdump -r file -f (syn|ack|fin|rst|psh|urg|all) 
-
 # nfdump by port
 nfdump -r file -P (src|dst) port
-
 # nfdump by vlan
 nfdump -r file -v vlan
-
 # nfdump by interface
 nfdump -r file -i interface
-
 # nfdump by as
 nfdump -r file -A (src|dst) as
-
 # nfdump by tos
 nfdump -r file -t tos
 
 # examples:
 # tables of top 10 ip addresses by bytes
 nfdump -r file -o "fmt:%sa %da %ibytes" -s bytes -n 10
-
 # tables of top 10 ip addresses by packets
 nfdump -r file -o "fmt:%sa %da %pkt" -s packets -n 10
-
 # tables of top 10 ip addresses by flows
 nfdump -r file -o "fmt:%sa %da %flows" -s flows -n 10
-
 # tables of flows by src ip address
 nfdump -r file -o "fmt:%sa %da %pkt" -s packets -n 10 -a src ip 1.1.1.1
-
 # tables of flows by dst ip address
 nfdump -r file -o "fmt:%sa %da %pkt" -s packets -n 10 -a dst ip 1.1.1.1
-
+# tables of flows by src ip address and port
+nfdump -r file -o "fmt:%sa %da %pkt" -s packets -n 10 -a src ip 1.1.1.1 and port 80
 
 nfdump -R /path/to/nfcapd/ -o "fmt:%ts %td %pr %sa:%sp -> %da:%dp %pkt %byt %flg %tos %bps %pps %bpp" -s bytes -n 10
 nfdump -R /path/to/nfcapd/ -o "fmt:%ts %td %pr %sa:%sp -> %da:%dp %pkt %byt %flg %tos %bps %pps %bpp" -s bytes -n 10 -A src -a src net 1.2.3.0 -a dst net 4.3.2.0 -f all -p tcp -P src 80 -P dst 80 -v 1 -i eth0 -t 0x00   
