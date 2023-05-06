@@ -1,0 +1,7 @@
+#!/bin/bash
+for i in Ellen Ash Dallas Lambert Brett Kane Parker
+do 
+  cat crew.json | jq '[ select(.name.first == "'$i'")]'
+done
+
+

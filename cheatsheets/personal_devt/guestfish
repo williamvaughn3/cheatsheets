@@ -1,0 +1,40 @@
+# Modify file content inside VM using guestfish
+[tag: virtualizaiton,guestfish]
+guestfish --rw -a /tmp/OracleLinux-66.img -i edit /etc/ssh/sshd_config
+
+#Remove a package from qcow2 image, without booting into the Virtual Machine
+[tag: virtualizaiton,guestfish]
+guestfish --rw -a /tmp/OracleLinux-66.img -i command "yum remove cloud-init -y"
+
+# modify password of user admin
+[tag: virtualizaiton,guestfish]
+guestfish --rw -a /tmp/OracleLinux-66.img -i command "bash -c 'echo admin:amol123 | chpasswd'"
+
+# reduce qcow2 image size
+[tag: virtualizaiton,guestfish]
+guestfish --rw -a /tmp/OracleLinux-66.img -i command "bash -c 'dd if=/dev/zero of=/EMPTY bs=1M; rm -f /EMPTY'"
+
+# reduce thin provisioned qcow2 image size
+[tag: virtualizaiton,guestfish]
+guestfish --rw -a /tmp/OracleLinux-66.img -i command "bash -c 'fstrim -v /'"
+
+# remove all files from /var/log
+[tag: virtualizaiton,guestfish]
+guestfish --rw -a /tmp/OracleLinux-66.img -i command "bash -c 'rm -rf /var/log/*'"
+
+# remove all files from /tmp
+[tag: virtualizaiton,guestfish]
+guestfish --rw -a /tmp/OracleLinux-66.img -i command "bash -c 'rm -rf /tmp/*'"
+
+# clean up all cache files
+[tag: virtualizaiton,guestfish]
+guestfish --rw -a /tmp/OracleLinux-66.img -i command "bash -c 'yum clean all'"
+guestfish --rw -a /tmp/OracleLinux-66.img -i command "bash -c 'rm -rf /var/cache/*'"
+guestfish --rw -a /tmp/OracleLinux-66.img -i command "bash -c 'rm -rf /var/tmp/*'"
+guestfish --rw -a /tmp/OracleLinux-66.img -i command "bash -c 'rm -rf /tmp/*'"
+
+# clean all pip cache
+[tag: virtualizaiton,guestfish]
+guestfish --rw -a /tmp/OracleLinux-66.img -i command "bash -c 'rm -rf /root/.cache/pip/*'"
+for i in $(guestfish --rw -a /tmp/OracleLinux-66.img -i command "bash -c 'ls /home/'"); do guestfish --rw -a /tmp/OracleLinux-66.img -i command "bash -c 'rm -rf /home/$i/.cache/pip/*'"; done
+

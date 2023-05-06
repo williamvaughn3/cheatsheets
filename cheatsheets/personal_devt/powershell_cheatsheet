@@ -1,0 +1,256 @@
+
+# Powershell find string in file
+gci -Recurse | Select-String -Pattern "wiki" | Select-Object Path, LineNumber, Pattern
+
+# Powershell Get Hash of file
+Get-FileHash -Path "/Windows/Windows/System32/ar-SA/access_log" -Algorithm MD5
+
+# Powershell Count objects 
+(gci -Path /Windows -Recurse -Directory).length
+
+# Powershell Get the Creation time of a file
+(gci -Recurse | Select-String -Pattern "wiki"| Select-Object -First 1).Path | Get-ItemProperty | Select-Object creationtime 
+
+# Powershell Expand Commandline history
+Get-History -id 10 | Select-Object -ExpandProperty CommandLine
+
+# Powershell Set Variable
+Set-Variable -Name "myvar" -Value "myvalue"
+
+# PowershellBase64 decode
+[System.Convert]::FromBase64String( "BASE64_HERE" )
+[System.Text.Encoding]::UTF8.GetString( ) to convert from bytes to string.
+[System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String(((Get-History)[9].Commandline).split('"')[1]))
+
+# Powershell View all atributes
+Get-Job | Format-List *
+
+# PowershellProcesses Associated to users
+Get-Process -IncludeUserName
+
+# Powershell Expand logs
+Expand-Archive /Windows/Windows/System32/winevt/Logs/Security.zip -DestinationPath /tmp/logs/
+
+# Powershell Find total Logs in file
+(Import-Clixml /tmp/security.xml).length 
+$logs = (Import-Clixml /tmp/logs/Security.xml)
+(($logs).Id | select -uniq).length
+
+# PowershellFind value based on object property
+($logs | where -Value "4444" -CEQ ID).Properties
+
+# Powershell header inspection
+foreach ($i in (1..50))  { 
+    $i; 
+    $res=(Invoke-WebRequest -Uri "http://127.0.0.1:9999/$i").RawContent; 
+    if ($res -NotLike "*anumber*") {
+       Write-Host $res
+       break
+    }
+ 
+# PowershellPowershell Read Stream
+    $tcpClient = [Net.Sockets.TcpClient]::new("127.0.0.1", "55555")
+    $tcpStream = $tcpClient.GetStream()
+    $reader = [IO.StreamReader]::new($tcpStream)
+    Write-Host $reader.ReadLine()
+
+# PowershellPowershell Read Alernate Data Stream of file
+    getfattr -R -n ntfs.streams.list /Windows/Windows/System32/DriverState/Devices/st
+    Get-Content /Windows/Windows/System32/DriverState/Devices/file.txt:file.db
+    \Program Files (x86)\Mozilla Firefox\gmp-clearkey\0.1\file.zip
+
+## Command Help
+# Learn about Commands
+Get-Command "command name"
+# Get help for a command
+Get-Help "command name"
+# Get help for a command with examples
+Get-Help "command name" -Examples
+# Get help for a command with examples and full details
+Get-Help "command name" -Examples -Full
+# Get help for a command with examples and full details and online
+Get-Help "command name" -Examples -Full -Online
+
+## Powershell Verbs 
+Get-Verb | findstr "verb name"
+
+## Command Information
+# Find module that contains a command
+Get-Command "command name" | Select-Object -ExpandProperty ModuleName
+Get-Command "command name" | Select-Object -Property Source
+
+## Aliases
+Get-Alias "alias name"
+# Get all aliases
+Get-Alias
+
+## Get-PSRepository
+# Show Module Repository
+Get-PSRepository
+# Search for a module in PSRepository
+Find-Module "module name" | Select-Object -Property Name,Version,Repository,Description,Author
+# Install a module from PSRepository
+Install-Module "module name"
+# Install a module from PSRepository with dependencies
+Install-Module "module name" -AllowClobber -Force -AllowPrerelease -Scope CurrentUser
+
+## Get-CIMInstance Object
+# Get execuatble of process CIM Class 
+Get-CimInstance -ClassName Win32_Process  | Select-Object -Property ExecutablePath
+
+## Specify the name of object to be updated by object name, what member to update, and the value to update
+Update-TypeData -TypeName "object name" -MemberName "member name" -MemberType "member type" -Value "value"
+
+## Elevated Start-Process
+# Run a process as administrator
+Start-Process -verb runas -FilePath "process name"
+
+## show hidden files
+# Get-ChildItem show hidden files (gci shorthand for Get-ChildItem)
+gci -Force
+
+# Retrieve name of the registry provider PSDrive (PSDrive is a drive that is mapped to a provider)
+Get-PSDrive -PSProvider Registry "name" | format-list * -Force
+
+# Get-Sha1hash for file
+Get-FileHash -Path "file name" -Algorithm SHA1
+
+# Variable Definition
+$variable = "value"
+
+# create a collection of 3 objects with a name property
+$collection = @(
+    [PSCustomObject]@{
+        Name = "Name1"
+    }
+    [PSCustomObject]@{
+        Name = "Name2"
+    }
+    [PSCustomObject]@{
+        Name = "Name3"
+    }
+)
+# return number of items in collection using array property
+$collection | Measure-Object -Property "array property" | Select-Object -Property Count
+
+# Range Operator character
+.. (double dot)
+
+## ADS alternate data stream
+Description 	    Introduced in 	Write Cmdlet
+Success stream 	    PowerShell 2.0 	Write-Output
+Error stream 	    PowerShell 2.0 	Write-Error
+Warning stream 	    PowerShell 2.0 	Write-Warning
+Verbose stream 	    PowerShell 2.0 	Write-Verbose
+Debug stream     	PowerShell 2.0 	Write-Debug
+Information stream 	PowerShell 5.0 	Write-Information
+Progress stream 	PowerShell 2.0 	Write-Progress
+
+# Create function and run it
+function function-name {
+    "function body"
+}
+function-name
+
+# Find invoke-command paramaters
+Get-Help Invoke-Command -Parameter * 
+#build in powershell variables local
+write-host "version of powershell"
+$PSVersionTable
+write-host "edition of powershell"
+$PSEdition
+write-host "location of powershell" 
+$PSHOME             
+write-host "location of powershell command"
+$PSCommandPath
+# powershell env session variables
+$PSModulePath
+$PSVersionTable
+
+Set-StrictMode - Use Set-StrictMode to quickly find errors in your scripts
+Set-StrictMode -Version Latest
+Set-StrictMode -Off
+
+#Create self-signed certificate
+New-SelfSignedCertificate -DnsName "dns name" -CertStoreLocation "Cert:\CurrentUser\My" -Subject "SEC586DTF" -Type CodeSigning 
+$thumbprint = "F2DD78FDBE6EE0512BA4FF9B151A54BC450F3DD9"
+$cert = Get-ChildItem -Path Cert:\CurrentUser\My\$thumbprint
+
+# export cert and import it into the trusted 
+Export-Certificate -Cert $cert -FilePath "C:\Users\user\Desktop\cert.cer"
+Import-Certificate -FilePath "C:\Users\user\Desktop\cert.cer" -CertStoreLocation Cert:\LocalMachine\Root
+
+# Sign a file with a certificate  Cert:\CurrentUser\My\thumbprint 
+Set-AuthenticodeSignature -FilePath "C:\Invoke-WorkbookUpdate.ps1" -Certificate $cert 
+
+# get the signature of a file
+Get-AuthenticodeSignature -FilePath "C:\Invoke-WorkbookUpdate.ps1" | format-list *
+
+# Powershell get-winevent sort by count and EventID from evtx file
+Invoke-WebRequest -Uri https://github.com/sbousseaden/EVTX-ATTACK-SAMPLES/raw/master/Command%20and%20Control/bits_openvpn.evtx -OutFile .\log.evtx
+Get-WinEvent -Path .\log.evtx | Group-Object -Property ID | Sort-Object -Property Count -Descending
+
+# Powershell get-winevent search for string in message and count
+$Message_User = $Logs | Where-Object {$_.Message -like "*MSEDGEWIN10\IEUser*"} | Group-Object -Property ID | Sort-Object -Property Count -Descending
+$Message_User
+
+# Powershell get-winevent show completed bits jobs for owner and count
+Get-WinEvent -Path .\log.evtx | Where-Object {$_.ID -eq 4} | Select-Object -Property Message | Measure-Object
+$CpltJobs = Get-WinEvent -Path .\log.evtx | Where-Object {$_.ID -eq 4} | Select-Object -Property Message
+$CpltJobs | Select-Object -Property Message | Where-Object {$_.message -like "*MSEDGEWIN10\IEUser*"} | Group-Object -PropertY Count | Sort-Object -Property Count -Descending
+# FilterXPath
+Get-WinEvent -Path .\log.evtx -FilterXPath '*[Process[ID=2136] and EventData[(Data[@Name="jobOwner"] = "MSEDGEWIN10\IEUSER")]]' | Measure-Object
+
+# Powershell get-winevent for specific event id and user
+$2136 = Get-WinEvent -Path .\log.evtx | Select-Object -Property Message | Where-Object {$_.Message -like "*2136*"} | Group-Object -Property Count | Sort-Object -Property Count -Descending
+$2136.Group | Format-List *
+Get-WinEvent -Path C:\temp\bits_openvpn.evtx -FilterXPath '*[EventData[(Data[@Name="processId"] = "2136") and (Data[@Name="jobOwner"] = "MSEDGEWIN10\IEUSER")]]' | Measure-Object
+
+# Powershell get-winevent show completed bits jobs for owner and count
+Invoke-WebRequest -Uri 'https://github.com/imamimam/EVTX-ATTACK-SAMPLES-/raw/master/Lateral Movement/LM_Remote_Service02_7045.evtx' -OutFile .\log.evtx
+https://sec586powerplay.blob.core.windows.net/sec586-ctf-resources/win10-pfirewall.log
+
+# Powershell get-winevent show firewall log stuff
+Invoke-WebRequest -Uri https://sec586powerplay.blob.core.windows.net/sec586-ctf-resources/win10-pfirewall.log -OutFile C:\temp\win10-pfirewall.log
+PS C:\Scripts>  $fwLog | Where-Object {$_.action -ne "DROP"} | Group-Object -Property 'dst-port' -NoElement |Sort-Object -Property Count -Descending    
+$fwLog = Get-Content C:\Temp\win10-pfirewall.log -ReadCount 1000 | ConvertFrom-Csv -Delimiter ' ' -Header @("date","time","action","protocol","src-ip","dst-ip","src-port","dst-port","size","tcpflags","tcpsyn","tcpack","tcpwin","icmptype","icmpcode","info","path")
+$fwLog | Where-Object {$_.action -eq "ALLOW"}  | Group-Object -Property dst-port | sort -Descending -Property count
+
+
+#############Level 2 Question 13##################
+#  Possible incorrect answer 
+#####################################################
+# Download and inspect the Kibana logs at: https://sec586powerplay.blob.core.windows.net/sec586-ctf-resources/kibana.log
+invoke-webrequest -uri https://sec586powerplay.blob.core.windows.net/sec586-ctf-resources/kibana.log -outfile C:\temp\kibana.log
+$KL = Get-Content C:\temp\kibana.log
+$Responses = $KL | ConvertFrom-Json  
+$Responses.res.responseTime | Measure-Object -Maximum -Minimum -Average -Sum -StandardDeviation
+Count             : 13
+# Should be 52
+Average           : 52.1538461538462
+Sum               : 678
+Maximum           : 245
+Minimum           : 3
+StandardDeviation : 85.1076241726186
+
+#This seems wrong?
+$responseTime = @()
+Get-Content C:\temp\kibana.log |Select-String -Pattern "`"responseTime`":(\d?)" |ForEach-Object {$responseTime += $_.Matches.Groups[1].Value} 
+$responseTime | Measure-Object -Average
+######################################################
+
+# Extract http://ip:port from the logs
+$JL = Get-Content C:\scripts\json.test | ConvertFrom-Json
+$JL.Message | Out-String | Select-String -Pattern "(?<serverAddr>http?:\/\/((?:[0-9'.']{1,20})[':'])?([0-9]{1,5}))" -AllMatches | ForEach-Object {$_.Matches.Groups[0].Value} | write-host
+
+# View Header data from Invoke-WebRequest
+$MyRequest = invoke-webrequest -uri https://www.sans.org -Headers @{"User-Agent"="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101 Firefox/68.0"} | Select-Object -Property Headers
+$myResult = $MyRequest.headers.X-Content-Type-Options
+
+# View Header data from Invoke-WebRequest
+Invoke-PowerPlayAnswer -Question "xcto" -Answer "nosniff"
+
+
+
+
+

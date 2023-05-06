@@ -1,0 +1,47 @@
+# Covert image
+[tag: virtualization,kvm,qemu ]
+qemu-img convert -p -f qcow2 -O qcow2 /path/to/image.qcow2 /path/to/image.qcow2
+
+# Covert image with compression
+[tag: virtualization,kvm,qemu ]
+qemu-img convert -p -f vmdk -O qcow2 -c /path/to/image.vmdk /path/to/image.qcow2
+
+# get qemu image info 
+[tag: virtualization,kvm,qemu ]
+qemu-img info /path/to/image.qcow2
+
+# get qemu image info with json format
+[tag: virtualization,kvm,qemu ]
+qemu-img info --output=json /path/to/image.qcow2
+
+# get qemu image info with json format and pretty print
+[tag: virtualization,kvm,qemu ]
+qemu-img info --output=json /path/to/image.qcow2 | jq .
+
+# resize grow qemu image
+[tag: virtualization,kvm,qemu ]
+qemu-img resize /path/to/image.qcow2 +10G
+
+# resize shrink qemu image
+[tag: virtualization,kvm,qemu ]
+qemu-img resize /path/to/image.qcow2 -10G
+
+# resize qemu image to 10G
+[tag: virtualization,kvm,qemu ]
+qemu-img resize /path/to/image.qcow2 10G
+
+# resize qemu image to 10G with force
+[tag: virtualization,kvm,qemu ]
+qemu-img resize -f /path/to/image.qcow2 10G
+
+# resize qemu image to 10G with force and preallocation disabled
+[tag: virtualization,kvm,qemu ]
+qemu-img resize -f /path/to/image.qcow2 10G --preallocation=off
+
+# resize qemu image to 10G with force and preallocation metadata
+[tag: virtualization,kvm,qemu ]
+qemu-img resize -f /path/to/image.qcow2 10G --preallocation=metadata
+
+# resize qemu image to 10G with force and preallocation full
+[tag: virtualization,kvm,qemu ]
+qemu-img resize -f /path/to/image.qcow2 10G --preallocation=full
