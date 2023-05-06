@@ -1,0 +1,13 @@
+# FTP via Bin
+ftp -n <<EOF
+open {{ 192.168.148.53 | blah.blah.com }}
+user anonymous anonymous
+put {{ file }}
+close
+EOF
+
+#FTP via curl statement in passive mode (try this, but if peer reset, try Active)
+curl -T {{ /path/file.extension }} -u anonymous: anonymous ftp://{{ url | ip }}/path
+
+#FTP via curl in Active Mode
+curl -T ./ftpdmin.exe -u anonymous:anonymous -P - ftp://192.168.148.53/ftpdmin.exe

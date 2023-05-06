@@ -1,0 +1,26 @@
+# get mail records
+host -t mx megacorpone.com
+
+
+megacorpone.com mail is handled by 10 fb.mail.gandi.net.
+megacorpone.com mail is handled by 50 mail.megacorpone.com.
+megacorpone.com mail is handled by 60 mail2.megacorpone.com.
+megacorpone.com mail is handled by 20 spool.mail.gandi.net
+
+# get txt records
+cheat txt host -t mx megacorpone.com
+
+# test 
+host idontexist.megacorpone.com
+
+# enum using host
+for ip in www ftp mail owa proxy router; do host $ip.megacorpone.com; done
+
+# enum using host
+for ip in $(seq 200 254); do host 51.222.169.$ip; done | grep -v "not found"
+
+
+# follow on enum
+ for ip in $(seq 100 254); do host 51.222.169.$ip; done | grep -v "not found" | grep -v '169.net'
+
+

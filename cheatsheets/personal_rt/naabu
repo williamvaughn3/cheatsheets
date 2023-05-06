@@ -1,0 +1,45 @@
+# Naabu
+https://github.com/projectdiscovery/naabu
+
+# Install
+sudo apt|yum install -y libpcap-dev
+
+# Need to ensure go is installed and configured
+go install -v github.com/projectdiscovery/naabu/v2/cmd/naabu@latest
+
+naabu -p 80,443,21-23,u:53 -host example.com
+naabu -p 80,443,21-23,u:53 -host 123.45.67.89
+
+#To run the naabu on a list of hosts, -list option can be used.
+
+naabu -list hosts.txt
+
+# To run the naabu on a ASN, AS input can be used. 
+# It takes the IP address available for 
+# given ASN and runs the enumeration on them.
+
+echo AS14421 | naabu -p 80,443
+
+##	 216.101.12.25:443
+##       216.101.17.220:80
+
+#You can also get output in json format using -json switch. 
+# This switch saves the output in the JSON lines format.
+
+naabu -host 104.16.99.52 -json
+
+## 	{"ip":"104.16.99.52","port":443}
+## 	{"ip":"104.16.99.52","port":80}
+
+
+# The ports discovered can be piped to other tools too. 
+# For example, you can pipe the ports discovered by naabu
+# to httpx which will then find running http servers on the host.
+
+echo hackerone.com | naabu -silent | httpx -silent
+for i in `cat list.txt`; do echo $i | sudo naabu -nmap-cli 'nmap -sV -oX nmap-output' | tee -a output.txt;done
+
+sudo naabu -host 10.11.1.0/24 -p 80 -nmap-cli 'nmap --script /usr/share/nmap/scripts/http-title.nse' -o output.txt 
+sudo naabu -host 192.168.147.0/24 -p 445 -nmap-cli 'nmap --script /usr/share/nmap/scripts/smb-enum-shares.nse' -o output.txt
+
+for i in `naabu -host 192.168.147.0/24 -p 445 -silent`; do enum4linux `echo $i | cut -d ':' -f 1` | tee -a output.txt; done

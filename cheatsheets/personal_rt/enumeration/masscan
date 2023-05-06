@@ -1,0 +1,23 @@
+---
+tags: [ enumeration, discovery ]
+---
+# Masscan
+massscan -p 1-65535 
+# options: 
+# -p: port range
+# -iL: input file
+# -oG: output file in grepable format
+# -oX: output file in XML format
+# -oJ: output file in JSON format
+masscan -p 1-65535 -iL ip.txt -oG masscan.txt
+masscan -p 1-65535 -iL ip.txt -oX masscan.xml
+masscan -p 1-65535 -iL ip.txt -oJ masscan.json
+                                                                                                                           
+#Network scanner for scanning as fast as possible.                                                                
+#Best run with elevated privileges. Nmap compatibility run `masscan --nmap` to find out more.                     
+#More information: <https://github.com/robertdavidgraham/masscan>.                                                
+masscan {{ip_address|network_prefix}} --ports {{80}}                                                             
+masscan {{10.0.0.0/16}} --top-ports {{100}} --rate {{100000}}                                                    
+masscan {{10.0.0.0/16}} --top-ports {{100}} --excludefile {{path/to/file}}`                                       
+masscan {{0.0.0.0/0}} --ports {{443}} --rate {{10000000}}                                                        
+masscan {{0.0.0.0/0}} --ports {{0-65535}} -output-format {{binary|grepable|json|list|xml}} --output-filename {{path/to/file}} 

@@ -1,0 +1,44 @@
+---
+tags: [ networking ]
+---
+# WARNING ! netstat is deprecated. Look below.
+
+# To view which users/processes are listening to which ports:
+sudo netstat -lnptu
+
+# To view routing table (use -n flag to disable DNS lookups):
+netstat -r
+
+# Which process is listening to port <port>
+netstat -pln | grep <port> | awk '{print $NF}'
+
+# Example output: 1507/python
+
+# Fast display of ipv4 tcp listening programs
+sudo netstat -vtlnp --listening -4
+
+# WARNING ! netstat is deprecated.
+# Replace it by:
+ss
+
+# For netstat -r
+ip route
+
+# For netstat -i
+ip -s link
+
+# For netstat -g
+ip maddr
+
+
+netstat -an | grep ESTABLISHED | awk '{print $5}' | cut -d: -f1 | sort | uniq -c | sort -n
+# find all established connections by port
+netstat -an | grep ESTABLISHED | awk '{print $5}' | cut -d: -f2 | sort | uniq -c | sort -n
+# find all established connections by ip and port
+netstat -an | grep ESTABLISHED | awk '{print $5}' | sort | uniq -c | sort -n
+# get all listening ports
+netstat -an | grep LISTEN | awk '{print $4}' | cut -d: -f2 | sort | uniq -c | sort -n
+# get all listening ports by ip
+netstat -an | grep LISTEN | awk '{print $4}' | cut -d: -f1 | sort | uniq -c | sort -n
+# get all listening ports by ip and port
+netstat -an | grep LISTEN | awk '{print $4}' | sort | uniq -c | sort -n

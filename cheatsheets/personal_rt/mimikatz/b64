@@ -1,0 +1,11 @@
+---
+tags: [ framework, windows, mimikatz ]
+---
+
+# obfuscate
+
+# Base64 output of commands
+## Switches
+
+base64 /out:true
+base64 /out:false

@@ -1,0 +1,15 @@
+#show zombie process
+ps ux | awk '{if($8=="Z") print}'
+
+#manually send the SIGCHLD signal to the parent of a zombie process.
+
+#lists the STAT column, process id, and parent process id of zombie processes
+ps -A -ostat,pid,ppid | grep -e '[zZ]'
+
+#SIGNAL KILL TO CHLD Process of the output of the pid above
+kill -s SIGCHLD 103
+
+
+
+
+

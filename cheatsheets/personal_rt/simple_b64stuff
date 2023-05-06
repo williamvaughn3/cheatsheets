@@ -1,0 +1,13 @@
+
+dir;
+write-host "Enter Name of File"
+$FileName = Read-Host
+# Get content of the file
+$FileContent = Get-Content $FileName
+#Get the bytes of the file content with encode
+$fileContentInBytes = [System.Text.Encoding]::UTF8.GetBytes($FileContent)
+# Base64 Encode file 
+$fileContentEncoded = [System.Convert]::ToBase64String($fileContentInBytes)
+# Save Base64 Enconde file with extension .b64
+$fileContentEncoded | Set-content ($fileName + ".b64")
+Write-Host $FileName + ".b64" + "File Encoded Successfully!"

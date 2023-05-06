@@ -1,0 +1,114 @@
+# CURL - cheatsheet
+# Outstanding Resource for Curl help https://everything.curl.dev
+
+# To download a file:
+curl <url>
+
+# To download and rename a file:
+curl <url> -o <outfile>
+
+# To download multiple files:
+curl -O <url> -O <url>
+
+# To download all sequentially numbered files (1-24):
+curl http://example.com/pic[1-24].jpg
+
+# To download a file and pass HTTP authentication:
+curl -u <username>:<password> <url>
+
+# To download a file with a proxy:
+curl -x <proxy-host>:<port> <url>
+
+# To download a file over FTP:
+curl -u <username>:<password> -O ftp://example.com/pub/file.zip
+
+# To get an FTP directory listing:
+curl ftp://username:password@example.com
+
+# To resume a previously failed download:
+curl -C - -o <partial-file> <url>
+
+# To fetch only the HTTP headers from a response:
+curl -I <url>
+
+# To fetch your external IP and network info as JSON:
+curl http://ifconfig.me/all.json
+
+# To limit the rate of a download:
+curl --limit-rate 1000B -O <outfile>
+
+# To get your global IP:
+curl httpbin.org/ip 
+
+# To get only the HTTP status code:
+curl -o /dev/null -w '%{http_code}\n' -s -I URL
+
+# Post data:
+curl -d password=x http://x.com/y
+
+# Auth/data:
+curl -u user:pass -d status="Hello" http://twitter.com/statuses/update.xml
+
+# multipart file upload
+curl -v -include --form key1=value1 --form upload=@localfilename URL
+
+# multipart form: send data from text field and upload file
+curl -F person=anonymous -F secret=@file.txt http://example.com/submit.cgi
+
+# Use Curl to Check if a remote resource is available Check-if-file-is-available-with-curl/
+curl -o /dev/null --silent -Iw "%{http_code} https://example.com/my.remote.tarball.gz
+
+# FTP 
+# tags:[FTP,CURL]
+curl --user daniel:secret ftp://example.com/download
+curl ftp://daniel:secret@example.com/download
+curl --list-only ftp://ftp.example.com/directory/ #Dir Listing
+# FTP Uploads
+curl -T localfile ftp://ftp.example.com/dir/path/remote-file
+curl -T localfile ftp://ftp.example.com/dir/path/ # local file as remote
+curl -T 'image[1-99].jpg' ftp://ftp.example.com/upload/ #globbing
+curl -T '{Huey,Dewey,Louie}.jpg' ftp://ftp.example.com/nephews/ #globbing
+
+#Delete FTP file with fail option
+curl -Q "-*DELE file" -u ftpuser:ftppass ftp://example.com/moo
+
+#
+curl -X POST https://reqbin.com/echo/post/json 
+   -H "Content-Type: application/json" \
+   -d '{"productId": 123456, "quantity": 100}' 
+
+
+#    The curl command can be used to interact with with FTP using the following command:
+    curl -u ftpuser:ftppass ftp://127.0.0.1
+    curl -u ftpuser:ftppass ftp://127.0.0.1/filename1 -Q '-*DELE file1'
+
+#   FTP download files 
+    curl -u ftpuser:ftppass ftp://127.0.0.1/file.something -O a.f.b --cookie cookie.txt
+
+#   enumerate the HTTP server using curl with the following:
+    curl -D - http://127.0.0.1/ #    -D - specifies that we dump server headers to stdout.
+
+#   The prior curl command had an HTTP header of Set-Cookie. We can save this to a file using:
+    curl -D - http://127.0.0.1 -c cookie.txt
+
+#  JSON
+  curl http://127.0.0.1/cache | python -m json.tool
+
+#    We can attempt to POST deleteone=files to delete one file:
+
+    curl -s http://127.0.0.1/cache --cookie cookie.txt -d deleteone=files
+
+#    We get in response: {"data":"Curl Not Allowed","request":false}
+#    We need to change the useragent string via the following command:
+    curl -s http://127.0.0.1/cache --cookie cookie.txt -d deleteone=files -A "My New User-Agent"
+
+    for i in seq {1..3834}; do curl -s http://127.0.0.1/cache --cookie cookie.txt -d deleteone=files -A "My New User-Agent"; done
+
+#    Now we just need to upload file enumerating the upload form field at:
+curl -u ftpuser:ftppass ftp://127.0.0.1/ -Q '-*DELE file1'
+curl -D - http://127.0.0.1 -c cookie.txt
+
+curl -u ftpuser:ftppass -T a.f.b ftp://127.0.0.1/upload --cookie cookie.txt -v
+for i in seq {1..3834}; do curl -s http://127.0.0.1/cache --cookie cookie.txt -d deleteone=files -A "My New User-Agent"; done
+
+curl -F file=@'./file.something' http://127.0.0.1/upload --cookie cookie.txt 

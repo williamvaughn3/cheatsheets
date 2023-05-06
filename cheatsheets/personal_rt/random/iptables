@@ -1,0 +1,25 @@
+# 1. Set the default policies to DROP for the INPUT,FORWARD and OUTPUT chains.
+iptables -P INPUT DROP
+iptables -P FORWARD DROP
+iptables -P OUTPUT DROP
+
+# 2. Create a rule to LOG all new SSH  connection attempts.
+iptables -A INPUT -p tcp --dport 22 -m state --state NEW -m recent --set --name SSH --rsource -j LOG --log-prefix "SSH: "
+
+# 3. Create a rule to ACCEPT all connections that are ESTABLISHED,RELATED on the INPUT and the OUTPUT chains.
+iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+iptables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+#4. Create a rule to allow only remote source ip address 172.18.0.222 to access the local SSH server on (port 22).
+iptables -A INPUT -p tcp --dport 22 -source 172.18.0.222 -j ACCEPT
+
+#5. Create a rule to allow any remote ip to access local tcp servers on ports 25 and 80.
+iptables -A INPUT -p tcp --dport 25 -j ACCEPT
+iptables -A INPUT -p tcp --dport 80 -j ACCEPT
+
+#6. Create a rule applied to the INPUT chain to ACCEPT all traffic from the lo interface.
+iptables -A INPUT -i lo -j ACCEPT
+
+#7. Create a rule to allow UDP port 53 and TCP port 80 connections going out (OUTPUT).
+iptables -A OUTPUT -p udp --dport 53 -j ACCEPT
+iptables -A OUTPUT -p tcp --dport 80 -j ACCEPT

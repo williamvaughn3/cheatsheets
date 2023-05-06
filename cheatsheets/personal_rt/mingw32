@@ -1,0 +1,12 @@
+# Windows compile
+# Install 
+sudo apt install mingw-w64
+
+# Example compile of exploit
+i686-w64-mingw32-gcc 42341.c -o syncbreeze_exploit.exe -lws2_32
+
+# links needed file when error happens for 
+# /usr/bin/i686-w64-mingw32-ld: /tmp/cchs0xza.o:42341.c:(.text+0x97): 
+# undefined reference to `_imp__WSAStartup@8'
+# found by googling the error
+

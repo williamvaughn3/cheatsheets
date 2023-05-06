@@ -1,0 +1,5 @@
+
+# local | remote - the ip address is the victim IP
+portfwd add -l 1234 -p 445 -r x.x.x.x
+
+

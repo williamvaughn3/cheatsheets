@@ -1,0 +1,189 @@
+
+################################
+# CTF / Pen / Lab  Methodology #
+################################
+
+1. Probe
+
+2. Scan
+
+3. Enumerate: 
+   - Record and Research Accessible Files and Services
+
+4. Test Services 
+   - Associated Vulns, Defaults, Fuzz, Static and Dynamic reviews
+
+5. Obtain Access
+   - Persistence if required
+#####
+    IF ACCESS == HIGH_PRIV THEN GOTO STEP_8 
+    ELSE CONTINUE
+#####
+
+6. Discovery
+   - System Info
+   - What we can use and interact with
+     - Files, users, processes, services
+   - LoLBins: Software, Network Services
+
+7.Eslcalate (Test)
+    WITH INFO FROM STEP 6 DO:
+        - STEP3 
+        - STEP4
+
+8. Collect
+   - Valuable files of interest
+   - Users, Groups, Passwords, Hashes
+   - Network Information that may lead into follow on efforts
+
+9. Move forward or Clean up
+   - Persistence
+   - Pivot
+   - Cleanup
+
+
+#####################
+#  Prope and Scan   #
+#####################
+
+# Ping sweep
+## Linux
+
+for i in {1..254} ;do (ping -c 1 192.168.1.$i | \
+  grep "bytes from" &) ;done
+
+## Windows
+
+for /L %i in (1,1,255) do @ping -n 1 -w 200 192.168.1.%i > \
+  nul && echo 192.168.1.%i is up.
+
+## Scan
+nmap -sn 10 .11.1.* -oG - | awk '/Up$/{print $2}' > iplist.txt
+nmap -sL 10.11.1.* -oG - | awk '/Up$/{print $2}' > iplist.txt
+nbtscan -r 10.11.1.0/24 
+smbtree
+onesixtyone
+snmpwalk
+
+##  System Scan
+nmap --top-ports 20 --open -iL iplist.txt
+nmap -sS -A -sV -O -p- ipaddress
+nmap -sU ipaddress
+masscan -p1-65535
+unicornscan -mT -Iv ipaddress -p 1-65535
+
+### Nmap Scripts
+nmap --script default,safe,discovery,version
+nmap --script vuln,malware,exploit
+nmap --script instrusive
+nmap --script default, fuzzer
+nmap --script brute,auth
+nmap --script broadcast
+
+### Nuclei
+nuclei -u https://my.target.site
+nuclei -l /path/to/list-of-targets.txt
+nuclei -u https:// my.target.site -as 
+nuclei -l list-of-targets.txt -retries 3
+
+## See tutorial for building workflows and and search cheatsheets if need for session or cookies
+## Worth noting to look at the MSF Aux Modules
+
+######################
+#  Service Scanning  #
+######################
+
+## Common Services 
+DNS
+SMB/SAMBA
+NTLM
+FTP
+Print Servers
+Mail Servers
+SNMP
+LLMNR
+ARP/Responder
+
+##  WebApp
+nikto
+Feroxbuster
+dirb
+dirbuster
+gobuster
+wpscan
+dotdotpwn
+view source
+davtest\\cadevar
+joomscan
+wapiti
+feroxbuster
+
+## LFI\\RFI Test
+fimap # old
+LFITester 
+curl loop with seclist payloads
+
+## Linux\\Windows
+smbclient -L //ipaddress
+showmount -e ipaddress port
+rpcinfo
+Enum4Linux
+
+
+## Exploitation
+
+Default Creds
+Harvested Creds
+Gather Version Numbers
+Searchsploit
+https://github.com/nomi-sec/PoC-in-GitHub
+Download test fuzz/codereview/check/software
+curl https://poc-in-github.motikan2010.net/api/v1/?cve_id=$1  \
+  | jq '.pocs[] | {description,full_name,html_url,created_at,updated_at,stargazers_count}' \
+  | jq -s 'sort_by(.stargazers_count, .updated_at)'"
+
+#######################
+# Post Initial Access #
+#######################
+
+# Linux
+linux-local-enum.sh
+linuxprivchecker.py
+linux-exploit-suggestor.sh
+unix-privesc-check.py
+
+# Windows
+wpc.exe
+windows-exploit-suggestor.py
+windows\_privesc\_check.py
+windows-privesc-check2.exe
+
+# Priv Escalation
+acesss internal services (portfwd)
+add account
+List of exploits
+
+# Linux
+sudo su
+KernelDB
+Searchsploit
+lolbins
+
+
+# Final
+
+PConfig\\WhoamI
+flag/proof.txt
+
+Follow on pivot potential
+Investigate -  
+  - Browser History if Applicable
+  - Sessions, Network Connections, Arp, host entries ect.
+Collect Keys,Hashes,applicable DB tables,files,SSH Keys
+Offline Crack/Brute any potontial follow-on enabling files
+ - jtr
+ - hashcat
+Clean up
+Shut ports / services down
+Clear history
+Clear logs

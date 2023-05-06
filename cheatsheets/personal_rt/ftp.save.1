@@ -1,0 +1,7 @@
+ftp -n <<EOF
+open {{ 192.168.148.53 | blah.blah.com }}
+user anonymous anonymous
+put {{ file }}
+close
+EOF
+

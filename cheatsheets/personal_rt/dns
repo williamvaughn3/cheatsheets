@@ -1,0 +1,24 @@
+## DIG commands
+dig www.google.com
+dig www.google.com A                    
+dig www.google.com A +short             # short cuts down on the output
+dig www.google.com ANY +noall +answer   # Returns all records
+dig -x 192.168.8.8 +noall +answer       # Reverse lookup
+dig www.google.com A +noall +answer     # Returns all A records
+dig www.google.com +nocomments \        # only answer section
+   +noquestion +noauthority \
+   +noadditional +nostats      
+dig www.google.com A +noall \           # ttl - time to live records
+    +answer +ttlid 
+dig www.google.com A +noall \           # get the ttl for the record
+  +answer +ttlid | grep -v '^;' \
+  | awk '{print $2}'
+dig @ns1.google.com google.com axfr     # zone transfer
+
+### DNS record types
+dig www.google.com MX +short            # mail
+dig www.google.com NS +short            # name server
+dig www.google.com TXT +short           # text
+dig www.google.com SOA +short           # start of authority
+dig www.google.com CNAME +short         # canonical name
+

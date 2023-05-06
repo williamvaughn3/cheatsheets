@@ -1,0 +1,48 @@
+
+#install
+go install -v github.com/projectdiscovery/httpx/cmd/httpx@latest
+
+# Run the tool against all the hosts and subdomains in hosts.txt
+# and returns URLs running HTTP webserver.
+
+cat hosts.txt | httpx 
+
+# Run the tool with the -probe flag against all the hosts 
+# in hosts.txt and return URLs with probed status.
+
+httpx -list hosts.txt -silent -probe
+
+# CIDR Scan
+echo 173.0.84.0/24 | httpx -silent
+
+# AS Number Input
+echo AS14421 | httpx -silent
+
+# Toolchain
+subfinder -d hackerone.com -silent| httpx -title -tech-detect -status-code
+
+# JARM Fingerprint
+subfinder -d hackerone.com -silent | httpx -jarm
+
+# File/Path Bruteforce
+httpx -l urls.txt -path /v1/api -sc
+
+
+httpx -status-code -title -tech-detect -list {{ url textfile }}
+
+
+
+# As default, httpx checks for HTTPS probe and fall-back to HTTP only if HTTPS is not reachable.
+
+# The -no-fallback flag can be used to display both HTTP and HTTPS results
+
+# Custom scheme for ports can be defined, for example -ports http:443,http:80,https:8443
+
+# The following flags should be used for specific use cases instead of running them as default with other probes:
+#  -favicon,-vhost, -http2, -pipeline, -ports, -csp-probe, -tls-probe, -path
+
+#  When using the -json flag, all the default probe results are included in the JSON output.
+
+#     Custom resolver supports multiple protocol (doh|tcp|udp) in form of protocol:resolver:port (e.g. udp:127.0.0.1:53)
+# Invalid custom resolvers/files are ignored.
+

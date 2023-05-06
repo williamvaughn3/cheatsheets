@@ -1,0 +1,1 @@
+gci file:///C:/SANS/workbook/labs/586_1/ -Recurse | Select-String -Pattern "<code>" | Select-Object Path, LineNumber, Pattern

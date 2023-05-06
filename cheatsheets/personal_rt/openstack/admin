@@ -1,0 +1,122 @@
+---
+syntax: javascript
+tags: [openstack, admin, administration]
+---
+
+#
+## ADMIN Rights required
+#--------------------------
+
+# List OpenStack services
+openstack catalog list
+
+#
+## Domains
+#----------------
+
+# List domains
+openstack domain list
+
+# Show domain details
+openstack domain show <domain ID>
+
+# Create domain
+openstack domain create <domain name>
+
+# Update domain
+#openstack domain set <key> <value> <domain ID>
+
+# Delete domain
+openstack domain delete <domain ID>
+
+#
+## Users
+#--------------------------
+
+# List users
+openstack user list
+
+# Show user details
+openstack user show <user ID>
+
+# Create user
+openstack user create --password <password> <user name>
+
+# Update user
+openstack user set <key> <value> <user ID>
+
+# Set user password
+openstack user password set
+
+#Delete user
+openstack user delete <user ID>
+
+#
+## Groups
+#--------------------------
+
+# List groups
+openstack group list
+
+# Show group details
+openstack group show <group ID>
+
+# Create group
+openstack group create <group name>
+
+# Update group
+openstack group set <key> <value> <group ID>
+
+# Add user to group
+openstack group add user <group ID> <user ID>
+
+# Remove user from
+openstack group remove user <group ID> <user ID>
+
+# Delete group
+openstack group delete <group ID>
+
+#
+## Projects
+#--------------------------
+
+# List projects
+openstack project list
+
+# Show project details
+openstack project show <project ID>
+
+# Create project
+openstack project create <project name>
+
+# Update project
+openstack project set <key> <value> <project ID>
+
+# Delete project
+openstack project delete <project ID>
+
+# Roles
+# Assign role on project
+openstack role add --project <project ID> [--user <userID> | --group <group ID>] <role name>
+
+# Remove role on project
+openstack role remove --project <project ID> [--user <user ID> | --group <group ID>] <role name>
+
+#
+## Images
+#--------------------------
+
+# List images
+openstack image list
+
+# Show image details
+openstack image show <image ID>
+
+# Create image
+openstack image create --disk-format qcow2 --file <filepath> <image name>
+
+# Update image
+openstack image set <key> <value> <image ID>
+
+# Delete image
+openstack image delete <image ID>

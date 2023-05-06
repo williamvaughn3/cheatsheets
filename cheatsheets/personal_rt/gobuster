@@ -1,0 +1,14 @@
+
+# Go Buster Web Content Discovery Feel free to change the wordlist based on the services.
+gobuster --url http://<ip or URL>/ -w /usr/share/seclists/Discovery/Web_Content/common.txt -s '200,204,301,302,307,403,500' -e
+
+# Go Buster subdomain brute forcing
+gobuster -m dns -w /usr/share/wordlists/subdomain.txt -u google.com -i
+
+# other Gobuster examples
+gobuster dir --url {{https://example.com/}} --wordlist {{path/to/file}}
+gobuster dns --domain {{example.com}} --wordlist {{path/to/file}}
+gobuster s3 --wordlist {{path/to/file}}
+gobuster vhost --url {{https://example.com/}} --wordlist {{path/to/file}}
+gobuster fuzz --url {{https://example.com/?parameter=FUZZ}} --wordlist {{path/to/file}}
+gobuster fuzz --url {{https://example.com/?FUZZ=value}} --wordlist {{path/to/file}}

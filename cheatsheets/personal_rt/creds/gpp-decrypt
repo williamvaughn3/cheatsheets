@@ -1,0 +1,12 @@
+---
+tags: [ win, password, group-policy-preferences, gpp ]
+---
+
+# Decrypt GPP passwords
+
+## Usage
+
+gpp-decrypt <encrypted password>
+
+gpp-decrypt 0cU/uGQrF5Xfhm61HAK8wFlfYce2W6ODQAeI957VrqY
+Pm2fUXScqI

@@ -1,0 +1,9 @@
+---
+tags: [ framework, windows, mimikatz ]
+---
+# List commands in module
+
+kerberos::
+sekurlsa::
+
+module followed by :: will list all the commands available in that module.

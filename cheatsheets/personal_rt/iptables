@@ -1,0 +1,115 @@
+---
+tags: [ networking ]
+---
+# To show hit for rules with auto refresh:
+watch --interval 0 'iptables -nvL | grep -v "0     0"'
+
+# To show hit for rule with auto refresh and highlight any changes since the last refresh:
+watch -d -n 2 iptables -nvL
+
+# To block port 902 and hide this port from nmap:
+iptables -A INPUT -i eth0 -p tcp --dport 902 -j REJECT --reject-with icmp-port-unreachable
+
+# Note, --reject-with accept:
+#	icmp-net-unreachable
+#	icmp-host-unreachable
+#	icmp-port-unreachable <- Hide a port to nmap
+#	icmp-proto-unreachable
+#	icmp-net-prohibited
+#	icmp-host-prohibited or
+#	icmp-admin-prohibited
+#	tcp-reset
+
+# To add a comment to a rule:
+iptables ... -m comment --comment "This rule is here for this reason"
+
+
+# To remove or insert a rule:
+# 1) Show all rules
+iptables -L INPUT --line-numbers
+# OR iptables -nL --line-numbers
+
+# Chain INPUT (policy ACCEPT)
+#     num  target prot opt source destination
+#     1    ACCEPT     udp  --  anywhere  anywhere             udp dpt:domain
+#     2    ACCEPT     tcp  --  anywhere  anywhere             tcp dpt:domain
+#     3    ACCEPT     udp  --  anywhere  anywhere             udp dpt:bootps
+#     4    ACCEPT     tcp  --  anywhere  anywhere             tcp dpt:bootps
+
+# 2.a) REMOVE (-D) a rule. (here an INPUT rule)
+iptables -D INPUT 2
+
+# 2.b) OR INSERT a rule.
+iptables -I INPUT {LINE_NUMBER} -i eth1 -p tcp --dport 21 -s 123.123.123.123 -j ACCEPT -m comment --comment "This rule is here for this reason"
+
+# List all rules
+iptables -L
+
+# List all rules in verbose format
+iptables -L -v
+
+# List all rules in verbose format with line numbers
+iptables -L -v -n --line-numbers
+
+# List all rules in verbose format with line numbers and expanded and show the target and show the policy and show the counters
+iptables -L -v -n --line-numbers -x -t -v -c
+
+# Add a rule to the INPUT chain
+iptables -A INPUT -p tcp --dport 22 -j ACCEPT
+
+# Add a rule to the INPUT chain from a specific IP address and port range
+iptables -A INPUT -p tcp --dport 22 -s x.x.x.x --sport 12345:12350 -j ACCEPT
+
+# add a rule to the OUTPUT chain
+iptables -A OUTPUT -p tcp --dport 22 -j ACCEPT
+
+# add a rule to the OUTPUT chain to a specific IP address and port range
+iptables -A OUTPUT -p tcp --dport 22 -d x.x.x.x --dport 12345:12350 -j ACCEPT
+
+# list rule numbers
+iptables -L -n --line-numbers
+
+# delete rule by number in INPUT chain
+iptables -D INPUT 1
+
+# add rule to CHAIN by number
+iptables -I CHAIN 1 -p tcp --dport 22 -j ACCEPT
+
+# save rules
+iptables-save > /etc/iptables/rules.v4
+# iptables
+
+> Program that allows configuration of tables, chains and rules provided by the Linux kernel firewall.
+> More information: <https://www.netfilter.org/projects/iptables/>.
+
+- View chains, rules, and packet/byte counters for the filter table:
+
+`sudo iptables -vnL`
+
+- Set chain policy rule:
+
+`sudo iptables -P {{chain}} {{rule}}`
+
+- Append rule to chain policy for IP:
+
+`sudo iptables -A {{chain}} -s {{ip}} -j {{rule}}`
+
+- Append rule to chain policy for IP considering protocol and port:
+
+`sudo iptables -A {{chain}} -s {{ip}} -p {{protocol}} --dport {{port}} -j {{rule}}`
+
+- Add a NAT rule to translate all traffic from the `192.168.0.0/24` subnet to the host's public IP:
+
+`sudo iptables -t {{nat}} -A {{POSTROUTING}} -s {{192.168.0.0/24}} -j {{MASQUERADE}}`
+
+- Delete chain rule:
+
+`sudo iptables -D {{chain}} {{rule_line_number}}`
+
+- Save iptables configuration of a given table to a file:
+
+`sudo iptables-save -t {{tablename}} > {{path/to/iptables_file}}`
+
+- Restore iptables configuration from a file:
+
+`sudo iptables-restore < {{path/to/iptables_file}}`

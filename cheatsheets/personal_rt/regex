@@ -1,0 +1,31 @@
+# Find Specific Word
+\W*((?i)rocket(?-i))\W*
+
+#regular expression that would match on any one alpha/numerica character.
+[A-Za-z0-9]{1}
+
+#regular expression that would match on only numbers of 3 
+# characters in length or greater.
+[0-9]{3,}   
+
+#regular expression that would only match on any one 
+# lowercase alpha-numeric characters in a string.
+[a-z0-9]{1}
+
+# regular expression that would match any two characters 
+# except uppercase A through L and except numbers 1 through 5.
+[^A-L1-5]{2}
+
+# regular expression that would match on strings 3 characters of length or more and consist of only alpha characters 
+# or only digits. (but not a mix of alpha+digits)
+[a-zA-Z0-9]{3,}
+
+# regular expression that will retrieve the '_age' of all persons in the json dump. 
+# (use capture groups to isolate desired matches from ancilliary characters)    
+(?<=_age\"\:\s)[0-9]{2,3}  
+
+# Regular expression that retrieves urls from http dump
+a.+(?:\s*href\s*=\s*)[\"\']?([^\"\'\s>]+)(?:[\"\'])?
+
+#ip address regular expression  that will match on any ip address
+(?:\b|^)((?:(?:(?:\d)|(?:\d{2})|(?:1\d{2})|(?:2[0-4]\d)|(?:25[0-5]))\.){3}(?:(?:(?:\d)|(?:\d{2})|(?:1\d{2})|(?:2[0-4]\d)|(?:25[0-5]))))(?:\b|$)

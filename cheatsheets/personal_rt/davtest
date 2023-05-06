@@ -1,0 +1,48 @@
+# Dav Test
+ davtest -url http://10.11.1.14
+#********************************************************
+Testing DAV connection
+OPEN            SUCCEED:                http://10.11.1.14
+#********************************************************
+NOTE    Random string for this session: pIzR5HdI
+#********************************************************
+ Creating directory
+MKCOL           SUCCEED:                Created http://10.11.1.14/DavTestDir_pIzR5HdI
+#********************************************************
+ Sending test files
+PUT     html    SUCCEED:        http://10.11.1.14/DavTestDir_pIzR5HdI/davtest_pIzR5HdI.html
+PUT     cgi     FAIL
+PUT     cfm     SUCCEED:        http://10.11.1.14/DavTestDir_pIzR5HdI/davtest_pIzR5HdI.cfm
+PUT     aspx    SUCCEED:        http://10.11.1.14/DavTestDir_pIzR5HdI/davtest_pIzR5HdI.aspx
+PUT     asp     FAIL
+PUT     txt     SUCCEED:        http://10.11.1.14/DavTestDir_pIzR5HdI/davtest_pIzR5HdI.txt
+PUT     shtml   FAIL
+PUT     jhtml   SUCCEED:        http://10.11.1.14/DavTestDir_pIzR5HdI/davtest_pIzR5HdI.jhtml
+PUT     jsp     SUCCEED:        http://10.11.1.14/DavTestDir_pIzR5HdI/davtest_pIzR5HdI.jsp
+PUT     php     SUCCEED:        http://10.11.1.14/DavTestDir_pIzR5HdI/davtest_pIzR5HdI.php
+PUT     pl      SUCCEED:        http://10.11.1.14/DavTestDir_pIzR5HdI/davtest_pIzR5HdI.pl
+********************************************************
+ Checking for test file execution
+EXEC    html    SUCCEED:        http://10.11.1.14/DavTestDir_pIzR5HdI/davtest_pIzR5HdI.html
+EXEC    cfm     FAIL
+EXEC    aspx    FAIL
+EXEC    txt     SUCCEED:        http://10.11.1.14/DavTestDir_pIzR5HdI/davtest_pIzR5HdI.txt
+EXEC    jhtml   FAIL
+EXEC    jsp     FAIL
+EXEC    php     FAIL
+dd***********************************************
+/usr/bin/davtest Summary:
+Created: http://10.11.1.14/DavTestDir_pIzR5HdI
+PUT File: http://10.11.1.14/DavTestDir_pIzR5HdI/davtest_pIzR5HdI.html
+PUT File: http://10.11.1.14/DavTestDir_pIzR5HdI/davtest_pIzR5HdI.cfm
+PUT File: http://10.11.1.14/DavTestDir_pIzR5HdI/davtest_pIzR5HdI.aspx
+PUT File: http://10.11.1.14/DavTestDir_pIzR5HdI/davtest_pIzR5HdI.txt
+PUT File: http://10.11.1.14/DavTestDir_pIzR5HdI/davtest_pIzR5HdI.jhtml
+PUT File: http://10.11.1.14/DavTestDir_pIzR5HdI/davtest_pIzR5HdI.jsp
+PUT File: http://10.11.1.14/DavTestDir_pIzR5HdI/davtest_pIzR5HdI.php
+PUT File: http://10.11.1.14/DavTestDir_pIzR5HdI/davtest_pIzR5HdI.pl
+Executes: http://10.11.1.14/DavTestDir_pIzR5HdI/davtest_pIzR5HdI.html
+Executes: http://10.11.1.14/DavTestDir_pIzR5HdI/davtest_pIzR5HdI.txt
+
+
+-------------------------------------

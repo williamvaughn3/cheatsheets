@@ -1,0 +1,47 @@
+# Aliases
+# alias alias_name="command_to_run"
+
+STACK ALIAS
+
+#Create, List, Show, Delete, and Show Failures
+alias mkstack="openstack stack create -e env.yaml -t main.yaml $1"
+alias lsstack="openstack stack list"
+alias rmstack="openstack stack delete $1 -y"
+alias stackls="openstack stack show $1"
+
+alias stackxl="openstack stack failures list --long $1"
+
+#List Severs, Find Sevrer, Server Console Logs, Server URL, Watch Sever Logs, 
+#-------
+alias lssvr="openstack server list"
+alias svrIP="openstack server list -c Name -c ID -c Networks -f value | grep $1 "
+alias svrurl="openstack console url show $1 --spice"
+alias svrlog="openstack console log show $1"
+alias findsvr="openstack server list  | grep $1 "
+alias svrls="openstack server show $1"
+alias svrIP="openstack server list -c Name -c ID -c Networks -f value | grep $1  "
+alias logwatch="watch -d -c 'openstack console log show $1 | tail -5'"
+
+
+Server ID to Variable for use in other Aliases as arg1
+#-------
+alias svrID='SVRID=openstack server  list -c ID -c name -f value | grep $1 cut -d  ' ' -f 1'
+
+
+openstack user list --domain ipa | grep $USER; openstack project list | grep project; openstack role add --user  $USER --user-domain ipa --project $PROJECT_ID user
+
+
+
+
+#Get name and addresses of servers
+openstack server show 661ab230-98fa-4d62-9c0c-056baedc698c -c name -c addresses
+
+
+openstack server list
+openstack server list | cut -d '|' -f 3,5 | cut -d ',' -f1
+
+openstack server list -c Name -c ID -c Networks -f value | grep Security_| cut -d ' ' -f 2,3 > file.txt
+
+sed -i s///g file.txt 
+sed -i s/\//g file.txt
+

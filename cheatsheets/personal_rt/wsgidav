@@ -1,0 +1,23 @@
+# wsgidav / webdav
+
+# Useful for hosting files that can be accessed and shared over network
+
+# Install it
+pip3 install wsgidav           
+# --        Output      ------- 
+#--- Defaulting to user installation because normal site-packages is not writeable
+#--- Collecting wsgidav
+#---  Downloading WsgiDAV-4.0.1-py3-none-any.whl (171 kB)
+#---    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 171.3/171.3 KB 1.6 MB/s eta 0:00:00
+#--- ...  
+#--- Successfully installed json5-0.9.6 wsgidav-4.0.1    
+
+
+# Run it 
+~/.local/bin/wsgidav --host 0.0.0.0 --port=80 --root=/home/vagrant/Documents/srvdir --auth=anonymous
+
+# Or update path and run it by executable
+if [ echo $PATH | grep -q "~/.local/bin" ]; then
+    export PATH=$PATH:~/.local/bin
+fi
+wsgidav --host=0.0.0.0 --port=80 --root=/home/kali/webdav --auth=anonymous --root /home/kali/webdav
