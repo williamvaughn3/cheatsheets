@@ -1,0 +1,49 @@
+#w Podman Generate Systemd Cheat Sheet
+
+# Generate a systemd unit file for a running container:
+    # Example:
+    $ podman generate systemd <container-name-or-id>
+
+# Generate systemd unit files for all running containers:
+    # Example:
+    $ podman generate systemd --all
+
+# Generate a systemd unit file with a restart policy:
+    # Example:
+    $ podman generate systemd --restart-policy=always <container-name-or-id>
+
+# Generate systemd unit files with a timeout:
+    # Example:
+    $ podman generate systemd --time 10 <container-name-or-id>
+
+# Generate a systemd unit file for a pod:
+    # Example:
+    $ podman generate systemd --name <pod-name-or-id>
+
+# Display command help:
+    # Example:
+    $ podman generate systemd --help
+
+# General Notes on systemd Unit Files:
+
+# Location:
+    - User unit files: ~/.config/systemd/user/
+    - System unit files: /etc/systemd/system/
+
+# Start, stop, enable, or disable a service:
+    # Start:
+	 sudo systemctl start <service-name>.service
+    # Stop:
+	 sudo systemctl stop <service-name>.service
+    # Enable (start on boot):
+	 sudo systemctl enable <service-name>.service
+    # Disable (don't start on boot):
+	 sudo systemctl disable <service-name>.service
+
+# Check the status of a service:
+    # Example:
+    	 sudo systemctl status <service-name>.service
+
+# Reload systemd to recognize new or edited unit files:
+    	 sudo systemctl daemon-reload
+

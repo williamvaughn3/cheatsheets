@@ -1,0 +1,70 @@
+### **1. Basic Syntax of a YARA Rule**
+
+rule RuleName
+{
+    meta:
+        author = "YourName"
+        description = "Description of the rule"
+        date = "YYYY-MM-DD"
+
+    strings:
+        $string1 = "text or binary pattern"
+        $string2 = { B0 B1 B2 B3 }  // byte pattern
+
+    condition:
+        $string1 and $string2
+}
+
+### **2. Using YARA from the Command Line**
+
+# **To check a file using a YARA rule:**
+
+yara rule.yar target_file.bin
+
+
+# **To recursively scan directories:**
+
+yara -r rule.yar target_directory/
+
+# **To use multiple YARA rule files:**
+
+yara -r rule1.yar rule2.yar target_directory/
+
+### **3. Common Modifiers in YARA Rules**
+
+- `nocase`: Ignores case, used for case-insensitive matches.
+- `wide`: Searches for the pattern as a Unicode (UTF-16LE) string.
+- `ascii`: Searches for the pattern as an ASCII string.
+- `fullword`: Matches the pattern only if it appears as a full word.
+
+# Example:
+
+    strings:
+        $string1 = "example" nocase
+        $string2 = "pattern" wide nocase
+
+### **4. Condition Operators and Functions**
+
+- Logical: `and`, `or`, `not`
+- Arithmetic: `+`, `-`, `*`, `/`, `%`
+- Comparison: `==`, `!=`, `<`, `<=`, `>`, `>=`
+- Functions: `filesize()`, `entrypoint()`, `int8()`, `int16()`, `int32()`, `uint8()`, `uint16()`, `uint32()`
+
+# Example condition:
+
+    condition:
+        $string1 and filesize() < 1MB
+
+
+### **5. External Variables**
+
+You can pass external values into YARA rules using `-d`:
+
+yara -d ext_var_name=value rule.yar target_file.bin
+
+# In the YARA rule
+
+   condition:
+        ext_var_name == "value"
+
+

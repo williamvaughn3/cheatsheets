@@ -1,0 +1,106 @@
+# SIGMA Cheatsheet
+
+title: Title of Your Detection Rule
+description: A brief description of what the rule detects
+status: experimental/stable/development
+author: Your Name
+date: YYYY-MM-DD
+logsource:
+  product: product_name (e.g., windows, linux)
+  service: service_name (e.g., sysmon, security)
+  category: optional_category
+detection:
+  keyword1:
+    field_name1: condition1
+    field_name2: condition2
+  keyword2:
+    field_name3: condition3
+  condition: keyword1 and keyword2
+falsepositives:
+  - List of potential false positives
+level: low/medium/high/critical
+tags:
+  - attack.txxxx.xxxx
+  - attack.txxxx.xxxx
+
+# SIGMA Example
+title: Detect Mimikatz Sekurlsa Usage
+description: Detects potential usage of Mimikatz's sekurlsa::logonpasswords command
+status: experimental
+author: Your Name
+date: YYYY-MM-DD
+logsource:
+  product: windows
+  service: sysmon
+detection:
+  keyword1:
+    CommandLine:
+      - '*sekurlsa::logonpasswords*'
+  condition: keyword1
+falsepositives:
+  - Administrative activity
+  - Penetration tests
+level: high
+
+# Example 2
+title: Suspicious SMB and Command Line Execution
+description: Detects potential lateral movement through the combination of SMB file copy and suspicious command line patterns
+status: experimental
+author: Your Name
+date: YYYY-MM-DD
+references:
+  - https://attack.mitre.org/techniques/T1021/002/
+logsource:
+  product: windows
+  service: sysmon
+detection:
+  smb_and_cmd:
+    Image: '\\*\\*'  # SMB paths usually start with double backslashes
+    CommandLine: 
+      - '*net use*'
+      - '*copy \\\\*'
+      - '*xcopy \\\\*'
+      - '*robocopy \\\\*'
+    User: 
+      - 'NT AUTHORITY\\SYSTEM'
+      - 'NT AUTHORITY\\NETWORK SERVICE'
+      - 'NT AUTHORITY\\LOCAL SERVICE'
+  condition: smb_and_cmd
+falsepositives:
+  - Administrators performing legitimate SMB operations
+  - Backup and replication tasks
+level: high
+tags:
+  - attack.lateral_movement
+  - attack.T1021
+  - attack.T1021.002
+
+
+# Convert a SIGMA rule to a specific backend format (e.g., Splunk)
+sigmac -t splunk -c splunk-windows index.rule
+
+# Convert all rules in a directory to a specific backend
+sigmac -t splunk -c splunk-windows -r rules/
+
+# Create a rule from a log source (assuming you have a config file like `config.yml`)
+sigma -l logsource.yml -c config.yml
+
+# Test a rule against a log file
+sigmac -t splunk -c splunk-windows -I log_file.log rule.yml
+
+# Convert with specific config file
+sigmac -t splunk -c myconfig.yml rule.yml
+
+# SIGMAC Options
+-t, --target TARGET             Target backend (default: sigma)
+-c, --config CONFIG             Config file for target backend
+-o, --output OUTPUT             Output file (default: stdout)
+-i, --input INPUT               Input file (default: stdin)
+-I, --input-file INPUT_FILE     Input file with list of files to convert
+-r, --recursive RECURSIVE       Recursively convert all files in directory
+-l, --list-targets              List all available target backends
+-L, --list-target-configs       List all available target backend configs
+-v, --verbose                   Verbose output
+-q, --quiet                     Quiet output
+-h, --help                      Show this help message and exit
+

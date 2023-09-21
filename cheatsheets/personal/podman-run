@@ -1,0 +1,56 @@
+# Basic Usage:
+    # Example:
+    $ podman run nginx
+
+# Run in detached mode (background):
+    # Example:
+    $ podman run -d nginx
+
+# Run and assign a name to the container:
+    # Example:
+    $ podman run --name my_nginx nginx
+
+# Expose and bind ports:
+    # Example:
+    $ podman run -p 8080:80 nginx
+
+# Mount a volume:
+    # Example:
+    $ podman run -v /host/path:/container/path nginx
+
+# Specify environment variables:
+    # Example:
+    $ podman run -e MY_VAR=value nginx
+
+# Run with a specific user:
+    # Example:
+    $ podman run -u 1001 nginx
+
+# Remove container after it exits:
+    # Example:
+    $ podman run --rm nginx
+
+# Use a different entrypoint:
+    # Example:
+    $ podman run --entrypoint /bin/bash nginx
+
+# Run a command inside the container:
+    # Example:
+    $ podman run nginx /bin/echo "Hello, World!"
+
+# Limit memory and CPU:
+    # Example:
+    $ podman run --memory 512m --cpus 1 nginx
+
+# Display command help:
+    # Example:
+    $ podman run --help
+
+# Specify an environment file:
+    # Example:
+    $ podman run --env-file /path/to/envfile nginx
+
+# Run container, detached, and add to pod:
+	# Example: 
+	podman run -d --pod mypod nginx
+

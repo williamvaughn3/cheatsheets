@@ -1,0 +1,148 @@
+TAXII (Trusted Automated Exchange of Intelligence Information) is a protocol used to exchange cyber threat intelligence (CTI) over HTTPS
+
+STIX (Structured Threat Information eXpression) is a language used to represent standardized CTI. 
+
+### STIX Basics
+
+STIX JSON Example:
+{
+  "type": "indicator",
+  "spec_version": "2.1",
+  "id": "indicator--a932fcc6-e053-467b-bf12-66613b3f9f86",
+  "created": "2022-01-01T12:34:56.789Z",
+  "modified": "2022-01-01T12:34:56.789Z",
+  "name": "Malicious IP",
+  "pattern": "[ipv4-addr:value = '10.0.0.1']",
+  "pattern_type": "stix"
+}
+
+# YAML to JSON is easy, and YAML is more readable.  Highly rec. using jq / yq tools.
+
+### TAXII Basics
+
+Endpoints:
+	Discovery Endpoint: Provides information about the services available on a TAXII server.
+	API Root Endpoint: Lists available collections and provides general server information.
+	Collection Endpoint: Provides details about and access to a specific collection.
+	Status Endpoint: Retrieves the status of a request.
+
+### Common Utilities
+
+- cti-taxii-client: A Python client for querying TAXII servers.
+  # List available collections:
+  taxii2-client --url https://taxii.server/api/ --collections
+
+  # Fetch STIX objects from a collection:
+  taxii2-client --url https://taxii.server/api/ --collection <COLLECTION_ID> --fetch
+  
+- pycti: OpenCTI Python connector for interacting with the OpenCTI platform and TAXII servers.
+  
+  from pycti import OpenCTIApiClient
+  
+  # Connect to OpenCTI
+  api_client = OpenCTIApiClient(url, token)
+  
+  # List TAXII collections
+  api_client.taxii.collection.list()
+  
+  # Fetch STIX objects from a TAXII collection
+  api_client.taxii.collection.fetch(collection_id)
+  
+### STIX Visualization and Tools
+
+MISP: Malware Information Sharing Platform can ingest and produce STIX formatted content.
+OpenCTI: An open-source platform that integrates with TAXII servers and provides visualization for STIX data.
+TAXII Server: A server implementation for hosting and distributing STIX datasets.
+
+### Best Practices
+
+1. Data Validation: Always validate the STIX content you're receiving.
+2. Regular Updates: Keep your threat intelligence updated by polling TAXII feeds at regular intervals.
+3. Enrichment: Combine STIX feeds with other intelligence sources for better context.
+4. Data Storage: Store STIX data in a database for faster access and better performance.
+5. Data Visualization: Use a visualization tool to better understand the STIX data you're receiving.
+6. Data Sharing: Share your STIX data with other organizations to improve the overall security posture.
+7. Data Analysis: Use a tool like OpenCTI to analyze the STIX data you're receiving.
+8. Data Correlation: Correlate STIX data with other data sources to identify patterns and trends.
+9. Data Enrichment: Enrich STIX data with other data sources to improve the overall quality of the data.
+10. Data Aggregation: Aggregate STIX data from multiple sources to get a better picture of the threat landscape.
+
+
+### **1. Indicator (Potential Threat Pattern)**
+{
+  "type": "indicator",
+  "id": "indicator--a1b2c3d4-e5f6-7890-a1b2-c3d4e5f67890",
+  "created": "2022-01-01T12:34:56Z",
+  "modified": "2022-01-01T12:34:56Z",
+  "name": "Suspicious Domain Associated with Malware Campaign",
+  "pattern": "[domain-name:value = 'malicious-example.com']",
+  "pattern_type": "stix",
+  "valid_from": "2022-01-01T12:34:56Z",
+  "labels": ["malicious-activity"]
+}
+
+
+### **2. Malware (Malicious Software)**
+{
+  "type": "malware",
+  "id": "malware--abcdef12-3456-7890-abcd-ef1234567890",
+  "created": "2022-01-01T12:34:56Z",
+  "modified": "2022-01-01T12:34:56Z",
+  "name": "RansomExe",
+  "description": "A ransomware that encrypts user files and demands bitcoin payment.",
+  "malware_types": ["ransomware"],
+  "is_family": false
+}
+
+### **3. Threat Actor (Adversaries)**
+{
+  "type": "threat-actor",
+  "id": "threat-actor--01234567-89ab-cdef-0123-456789abcdef",
+  "created": "2022-01-01T12:34:56Z",
+  "modified": "2022-01-01T12:34:56Z",
+  "name": "APT28",
+  "description": "APT28 is a threat group that has been attributed to the Russian government.",
+  "threat_actor_types": ["nation-state"],
+  "aliases": ["Fancy Bear", "Sofacy"]
+}
+
+
+### **4. Attack Pattern (Tactics & Techniques)**
+{
+  "type": "attack-pattern",
+  "id": "attack-pattern--23456789-abcd-ef01-2345-6789abcdef01",
+  "created": "2022-01-01T12:34:56Z",
+  "modified": "2022-01-01T12:34:56Z",
+  "name": "Spear Phishing",
+  "description": "Targeted attempt to steal sensitive information via email by masquerading as a trustworthy entity.",
+  "kill_chain_phases": [
+    {
+      "kill_chain_name": "mitre-attack",
+      "phase_name": "initial-access"
+    }
+  ]
+}
+
+### **5. Observed Data (Observed Incidents)**
+{
+  "type": "observed-data",
+  "id": "observed-data--3456789a-bcde-f012-3456-789abcdef012",
+  "created": "2022-01-01T12:34:56Z",
+  "modified": "2022-01-01T12:34:56Z",
+  "first_observed": "2022-01-01T10:30:45Z",
+  "last_observed": "2022-01-01T12:34:55Z",
+  "number_observed": 5,
+  "objects": {
+    "0": {
+      "type": "ipv4-addr",
+      "value": "192.168.1.1"
+    },
+    "1": {
+      "type": "ipv4-addr",
+      "value": "192.168.1.2"
+    }
+  }
+}
+
+
+

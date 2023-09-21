@@ -1,0 +1,40 @@
+# Podman Save  
+
+# Basic Usage:
+podman save -o <output-file.tar> <image-name-or-id>
+
+        # Example 
+        podman save -o my-image.tar my-image:latest
+
+# Save multiple images into a single tar archive:
+podman save -o <output-file.tar> <image1-name> <image2-name> ...
+
+        # Example:
+        podman save -o multi-image.tar image1:latest image2:latest
+
+# Compress the output using a specific format:
+podman save --compress --format <format> -o <output-file.tar> <image-name>
+
+        # Example (gzip compression):
+        podman save --compress --format oci-archive -o my-image.tar.gz my-image:latest
+
+# Supported formats:
+# - oci-archive (default)
+# - docker-archive
+# - docker-dir
+# - oci-dir
+
+# Save an image with a specific manifest type (mediatype):
+podman save --format docker-dir --manifest <mediatype> -o <output-file> <image-name>
+
+        # Example:
+        podman save --format docker-dir --manifest application/vnd.docker.distribution.manifest.v2+json -o my-image.tar my-image:latest
+
+# Display command help:
+podman save --help
+
+# Notes:
+# - Always specify the output file with the -o or --output option.
+# - You can use the saved tar archive for transporting the image to another system or for backup purposes.
+# - If you want to load the image from the tar archive back to Podman, you can use the `podman load` command.
+

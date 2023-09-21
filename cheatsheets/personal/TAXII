@@ -1,0 +1,66 @@
+TAXII (Trusted Automated Exchange of Intelligence Information) is a protocol used to exchange cyber threat intelligence (CTI) over HTTPS
+
+STIX (Structured Threat Information eXpression) is a language used to represent standardized CTI. 
+
+### STIX Basics
+
+STIX JSON Example:
+{
+  "type": "indicator",
+  "spec_version": "2.1",
+  "id": "indicator--a932fcc6-e053-467b-bf12-66613b3f9f86",
+  "created": "2022-01-01T12:34:56.789Z",
+  "modified": "2022-01-01T12:34:56.789Z",
+  "name": "Malicious IP",
+  "pattern": "[ipv4-addr:value = '10.0.0.1']",
+  "pattern_type": "stix"
+}
+
+### TAXII Basics
+
+Endpoints:
+- Discovery Endpoint: Provides information about the services available on a TAXII server.
+- API Root Endpoint: Lists available collections and provides general server information.
+- Collection Endpoint: Provides details about and access to a specific collection.
+- Status Endpoint: Retrieves the status of a request.
+
+### Common Utilities
+
+- cti-taxii-client: A Python client for querying TAXII servers.
+  # List available collections:
+  taxii2-client --url https://taxii.server/api/ --collections
+
+  # Fetch STIX objects from a collection:
+  taxii2-client --url https://taxii.server/api/ --collection <COLLECTION_ID> --fetch
+  
+- pycti: OpenCTI Python connector for interacting with the OpenCTI platform and TAXII servers.
+  
+  from pycti import OpenCTIApiClient
+  
+  # Connect to OpenCTI
+  api_client = OpenCTIApiClient(url, token)
+  
+  # List TAXII collections
+  api_client.taxii.collection.list()
+  
+  # Fetch STIX objects from a TAXII collection
+  api_client.taxii.collection.fetch(collection_id)
+  
+### STIX Visualization and Tools
+
+MISP: Malware Information Sharing Platform can ingest and produce STIX formatted content.
+OpenCTI: An open-source platform that integrates with TAXII servers and provides visualization for STIX data.
+TAXII Server: A server implementation for hosting and distributing STIX datasets.
+
+### Best Practices
+
+1. Data Validation: Always validate the STIX content you're receiving.
+2. Regular Updates: Keep your threat intelligence updated by polling TAXII feeds at regular intervals.
+3. Enrichment: Combine STIX feeds with other intelligence sources for better context.
+4. Data Storage: Store STIX data in a database for faster access and better performance.
+5. Data Visualization: Use a visualization tool to better understand the STIX data you're receiving.
+6. Data Sharing: Share your STIX data with other organizations to improve the overall security posture.
+7. Data Analysis: Use a tool like OpenCTI to analyze the STIX data you're receiving.
+8. Data Correlation: Correlate STIX data with other data sources to identify patterns and trends.
+9. Data Enrichment: Enrich STIX data with other data sources to improve the overall quality of the data.
+10. Data Aggregation: Aggregate STIX data from multiple sources to get a better picture of the threat landscape.

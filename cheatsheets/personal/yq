@@ -1,0 +1,43 @@
+# YAML and YQ
+
+### Print the entire YAML file:
+    yq r <file.yaml>
+### Print a specific key value:
+    yq r <file.yaml> <key>
+### Print a specific key value with dot notation for nested keys:
+    yq r <file.yaml> '<parentKey>.<childKey>'
+### Print a specific key value as JSON:
+    yq r --tojson <file.yaml> <key>
+
+#-- Writing/Modifying YAML:
+
+### Write a new key-value pair:
+    yq w -i <file.yaml> <key> <value>
+### Write a new key-value pair within a nested structure:
+    yq w -i <file.yaml> '<parentKey>.<childKey>' <value>
+### Update an existing key's value:
+    yq w -i <file.yaml> <key> <newValue>
+
+##-- Additional Options:
+
+### Use yq with JSON input/output: 
+    yq r --tojson <file.yaml> | jq '<expression>'
+### Perform in-place editing without creating a backup file:
+    yq w -i --no-backup <file.yaml> <key> <value>
+
+
+ 
+#-- Conversions
+
+## json -> yaml
+yq -p json -o yaml file.json 
+## json -> xml
+yq -p json -o xml file.json  
+## yaml -> json
+yq -p yaml -o json file.yaml 
+## yaml -> xml
+yq -p yaml -o xml file.yaml  
+## xml -> json
+yq -p xml -o json file.xml   
+## xml -> yaml
+yq -p xml -o yaml file.xml   

@@ -1,0 +1,44 @@
+ Podman Pod Commands
+ 
+# Create a new pod
+  podman pod create --name mypod
+
+# List all pods
+  podman pod list
+
+# List all pods with more details (in JSON format)
+  podman pod list --format json
+
+# Inspect a specific pod for more details
+  podman pod inspect mypod
+
+# Start a pod
+  podman pod start mypod
+
+# Stop a pod
+  podman pod stop mypod
+
+# Restart a pod
+  podman pod restart mypod
+
+# Remove a pod (add -f to force removal without prompt)
+  podman pod rm mypod
+
+# Display the logs for all containers within a pod
+  podman pod logs mypod
+
+# Run a command within a specific pod (for instance, to run 'ls' in a new container inside the pod)
+  podman run --pod mypod alpine ls
+
+# Pause all containers in a pod
+  podman pod pause mypod
+
+# Unpause all containers in a pod
+  podman pod unpause mypod
+
+# Display port mappings for a specific pod
+  podman pod port mypod
+
+# Top (display resource usage for containers within a pod)
+  podman pod top mypod
+wq

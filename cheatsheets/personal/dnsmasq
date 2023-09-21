@@ -1,0 +1,60 @@
+ https://thekelleys.org.uk/dnsmasq/docs/dnsmasq-man.html
+
+# Installation
+sudo apt-get install dnsmasq
+
+# Basic Configuration
+
+# Specify DNS servers
+echo "server={{DNS_IP}}" | sudo tee -a /etc/dnsmasq.conf
+
+# Listen on specific interfaces
+ echo "interface={{INTERFACE}}" | sudo tee -a /etc/dnsmasq.conf
+
+# Set domain
+ echo "domain={{DOMAIN_NAME}}" | sudo tee -a /etc/dnsmasq.conf
+
+# Set domain search
+ echo "expand-hosts" | sudo tee -a /etc/dnsmasq.conf
+
+# Enable DNS resolution for local domains
+ echo "local=/mydomain/" | sudo tee -a /etc/dnsmasq.conf
+
+# Configure DHCP
+ echo "dhcp-range={{START_IP}},{{END_IP}},{{LEASE_TIME}}" | sudo tee -a /etc/dnsmasq.conf
+
+# DNS Entries
+
+# Hostname to IP mapping
+ echo "address=/hostname/{{IP_ADDRESS}}" | sudo tee -a /etc/dnsmasq.conf
+
+# Wildcard domain to IP mapping
+ echo "address=/domain.name/{{IP_ADDRESS}}" | sudo tee -a /etc/dnsmasq.conf
+
+# Local domain-specific entries
+ echo "local=/local.domain/" | sudo tee -a /etc/dnsmasq.conf
+
+# DNS Caching
+# Enable DNS caching
+ echo "cache-size={{SIZE}}" | sudo tee -a /etc/dnsmasq.conf
+
+# Set cache time-to-live (TTL)
+ echo "local-ttl={{TTL}}" | sudo tee -a /etc/dnsmasq.conf
+
+# Logging and Debugging
+# Enable logging
+ echo "log-queries" | sudo tee -a /etc/dnsmasq.conf
+
+# Set log file location
+ echo "log-facility={{LOG_FILE}}" | sudo tee -a /etc/dnsmasq.conf
+
+# Increase debugging information
+ echo "log-async=5" | sudo tee -a /etc/dnsmasq.conf
+
+# Starting and Restarting DNSmasq
+# Start DNSmasq service
+ sudo systemctl start dnsmasq
+
+# Restart DNSmasq service
+ sudo systemctl restart dnsmasq
+
