@@ -53,14 +53,18 @@ https://www.slideshare.net/pumasecurity/secure-devops-a-pumas-tail
 
  SonarLint: https://www.sonarlint.org/  
 
- ## Rapid Risk Assessment (RRA)  
+## Rapid Risk Assessment (RRA)  
 
-    - PayPal risk questionnaire for new apps/services  
-   
-      
+- PayPal risk questionnaire for new apps/services  
 
-    - Mozilla Rapid Risk Assessment (RRA) model: 30-minute review  
-   
-      
+- Mozilla Rapid Risk Assessment (RRA) model: 30-minute review  
 
-    - Slack goSDL for questions to determine initial risk rating  
+- Slack goSDL for questions to determine initial risk rating  
+
+## Pre-Commit Hooks
+
+https://pre-commit.com/
+https://github.com/pre-commit/pre-commit© 
+https://github.com/sds/overcommit
+
+
