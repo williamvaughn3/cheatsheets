@@ -12,8 +12,13 @@
 >
 > Application inventory and classification information, and record and manage manual assessments and results with this tool
 
+## Code Inventory
 
-##  Static Analysis Tools
+GitHub Sloc Cloc and Code (SCC):
+[SCC Github](https://github.com/boyter/scc)
+
+
+## IDE Static Analysis Tools/Extensions
 
 SCode plugins for Semgrep (https://github.com/returntocorp/semgrep), 
 
