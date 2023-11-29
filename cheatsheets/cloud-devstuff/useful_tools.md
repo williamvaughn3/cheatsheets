@@ -53,18 +53,32 @@ https://www.slideshare.net/pumasecurity/secure-devops-a-pumas-tail
 
  SonarLint: https://www.sonarlint.org/  
 
+
+## 
+Archerysec
+> OPEN SOURCE ORCHESTRATION AND CORRELATION TOOL  
+https://www.archerysec.com/  
+
+OWASP Defect Dojo:
+> Open Source DevSecOps
+The leading application vulnerability management tool.
+Built for both DevSecOps and traditional application security.
+ (https://www.defectdojo.org/)
+ThreadFix (https://threadfix.it/)
+Code Dx (https://codedx.com/)
+
+
+
 ## Rapid Risk Assessment (RRA)  
 
 - PayPal risk questionnaire for new apps/services  
-
 - Mozilla Rapid Risk Assessment (RRA) model: 30-minute review  
-
 - Slack goSDL for questions to determine initial risk rating  
 
 ## Pre-Commit Hooks
 
 https://pre-commit.com/
-https://github.com/pre-commit/pre-commit© 
+https://github.com/pre-commit/pre-commit
 https://github.com/sds/overcommit
 
 
