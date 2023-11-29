@@ -26,20 +26,28 @@
 
  cfn_nag (https://github.com/stelligent/cfn_nag)  
 
- IntelliJ IDEA comes with built-in code analysis for Java and several other languages. These code checkers are mostly focused on good coding practices and correctness, but include   
- some basic security checks: https://www.jetbrains.com/help/idea/code-inspection.html
- FindBugs plugin for Eclipse: http://findbugs.sourceforge.net/manual/eclipse.html  
+IntelliJ IDEA comes with built-in code analysis for Java and several other languages.  
+ 
+These code checkers are mostly focused on good coding practices and correctness, but include some basic security checks:  
+ https://www.jetbrains.com/help/idea/code-inspection.html
 
- FindBugs plugin for IntelliJ: https://plugins.jetbrains.com/plugin/3847-findbugs-idea  
+FindBugs plugin for Eclipse: http://findbugs.sourceforge.net/manual/eclipse.html  
 
- SpotBugs plugin for Eclipse: https://spotbugs.github.io/    
+FindBugs plugin for IntelliJ: https://plugins.jetbrains.com/plugin/3847-findbugs-idea  
 
- Find Security Bugs plugin: based on FindBugs/SpotBugs, additional security-specific checks built in. Plugins available for Eclipse, IntelliJ, Android Studio, NetBeans; command line   
- integration for Ant and Maven: https://find-sec-bugs.github.io/
- Puma Scan: open-source (and commercial) Visual Studio plugin for C#: https://pumasecurity.io/. See this presentation: https://www.slideshare.net/pumasecurity/  
- secure-devops-a-pumas-tail  
+SpotBugs plugin for Eclipse: https://spotbugs.github.io/    
 
- Security Code Scan: open-source Visual Studio plugin for C#: https://security-code-scan.github.io/  
+Find Security Bugs plugin: based on FindBugs/SpotBugs, additional security-specific checks built in.  
+
+Plugins available for Eclipse, IntelliJ, Android Studio, NetBeans; command line integration for Ant and Maven: https://find-sec-bugs.github.io/  
+ 
+Puma Scan: open-source (and commercial) Visual Studio plugin for C#: https://pumasecurity.io/  
+
+See this presentation:   
+https://www.slideshare.net/pumasecurity/secure-devops-a-pumas-tail  
+
+ Security Code Scan: 
+ open-source Visual Studio plugin for C#: https://security-code-scan.github.io/  
 
  Microsoft DevSkim: https://github.com/Microsoft/DevSkim  
 
