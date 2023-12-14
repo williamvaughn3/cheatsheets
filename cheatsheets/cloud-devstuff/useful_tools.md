@@ -14,47 +14,33 @@
 
  ## Code Inventory  
 
- GitHub Sloc Cloc and Code (SCC):  
-
+GitHub Sloc Cloc and Code (SCC)
  [SCC Github](https://github.com/boyter/scc)  
 
  ## IDE Static Analysis Tools/Extensions  
 
- SCode plugins for Semgrep (https://github.com/returntocorp/semgrep),   
+[SCode plugins for Semgrep](https://github.com/returntocorp/semgrep)  
 
- Checkov (https://github.com/bridgecrewio/checkov),   
+[Checkov](https://github.com/bridgecrewio/checkov),   
 
- cfn_nag (https://github.com/stelligent/cfn_nag)  
+[cfn_nag](https://github.com/stelligent/cfn_nag)  
 
-IntelliJ IDEA comes with built-in code analysis for Java and several other languages.  
- 
-These code checkers are mostly focused on good coding practices and correctness, but include some basic security checks:  
- https://www.jetbrains.com/help/idea/code-inspection.html
+[FindBugs plugin for Eclipse](http://findbugs.sourceforge.net/manual/eclipse.html)
+[FindBugs plugin for IntelliJ](https://plugins.jetbrains.com/plugin/3847-findbugs-idea)
 
-FindBugs plugin for Eclipse: http://findbugs.sourceforge.net/manual/eclipse.html  
+[SpotBugs plugin for Eclipse](https://spotbugs.github.io/  )  
 
-FindBugs plugin for IntelliJ: https://plugins.jetbrains.com/plugin/3847-findbugs-idea  
+[Puma Scanopen-source (and commercial) Visual Studio plugin for C#](https://pumasecurity.io/)  
+See this presentation  https://www.slideshare.net/pumasecurity/secure-devops-a-pumas-tail  
 
-SpotBugs plugin for Eclipse: https://spotbugs.github.io/    
+[open-source Visual Studio plugin for C#](https://security-code-scan.github.io/)  
 
-Find Security Bugs plugin: based on FindBugs/SpotBugs, additional security-specific checks built in.  
-
-Plugins available for Eclipse, IntelliJ, Android Studio, NetBeans; command line integration for Ant and Maven: https://find-sec-bugs.github.io/  
- 
-Puma Scan: open-source (and commercial) Visual Studio plugin for C#: https://pumasecurity.io/  
-
-See this presentation:   
-https://www.slideshare.net/pumasecurity/secure-devops-a-pumas-tail  
-
- Security Code Scan: 
- open-source Visual Studio plugin for C#: https://security-code-scan.github.io/  
-
- Microsoft DevSkim: https://github.com/Microsoft/DevSkim  
-
- SonarLint: https://www.sonarlint.org/  
+[Microsoft DevSkim](https://github.com/Microsoft/DevSkim)  
+[SonarLint](https://www.sonarlint.org/)
 
 
-## 
+## Tools
+
 Archerysec
 > OPEN SOURCE ORCHESTRATION AND CORRELATION TOOL  
 https://www.archerysec.com/  
@@ -62,18 +48,37 @@ https://www.archerysec.com/
 OWASP Defect Dojo:
 > Open Source DevSecOps
 The leading application vulnerability management tool.
-Built for both DevSecOps and traditional application security.
- (https://www.defectdojo.org/)
-ThreadFix (https://threadfix.it/)
-Code Dx (https://codedx.com/)
+Built for both DevSecOps and traditional application security.  
+(https://www.defectdojo.org/)
 
+[ThreadFix](https://threadfix.it/)
+[Code Dx](https://codedx.com/)
+
+[Yelps pre-commit framework](https://pre-commit.com/) 
+> Provides a set of hooks to run lint checking for different languages before code can be checked in.
+
+[Overcommit](https://github.com/sds/overcommit):
+> git hook manager that comes with several predefined checks. 
+
+Carnigie Mellon University SEI on using this framework for security checks: https://docs.github.com/en/github/building-a-strong-community/creating-a-pull-request-template-for-your-repository
+
+## Commercial IDE plugins
+
+[Checkmarx](https://www.checkmarx.com/plugins/)  
+[Coverity plugins for Eclipse, IntelliJ, and Visual Studio](https://www.synopsys.com/content/dam/synopsys/sig-assets/datasheets/SAST-Coverity-datasheet.pdf)  
+[SecureAssist](https://community.synopsys.com/s/article/SecureAssist-Overview)  
+[Klocwork](https://www.perforce.com/solutions/static-analysis)  
+[Microfocus Fortify plugins for Eclipse and Visual Studio ](https://marketplace.microfocus.com/fortify)  
+[Veracode Greenlight](https://www.veracode.com/products/binary-static-analysis-sas)  
 
 
 ## Rapid Risk Assessment (RRA)  
 
 - PayPal risk questionnaire for new apps/services  
-- Mozilla Rapid Risk Assessment (RRA) model: 30-minute review  
+- Mozilla Rapid Risk Assessment (RRA) model (30-minute review)
 - Slack goSDL for questions to determine initial risk rating  
+- template for RRA [here](template_RRA.md)
+
 
 ## Pre-Commit Hooks
 

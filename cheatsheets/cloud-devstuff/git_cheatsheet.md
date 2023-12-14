@@ -70,16 +70,13 @@ To rebase on master
 When a rebase fails manually fix files and
 
 > `git add <files>`  
-
 > `git rebase --continue`  
 
 
 ### Move commits onto new branch
 
 > `git branch `  
-
 > `git reset --hard HEAD~1 # 1 to move 1 commit`  
-
 > `git checkout `  
 
 
@@ -93,48 +90,36 @@ When a rebase fails manually fix files and
 ### Amending changes
 
 > `git add `  
-
 > `git commit --amend`  
 
 
 ### Apply patches
 
 A detailed description can be found:
-
 [here](http://ariejan.net/2009/10/26/how-to-create-and-apply-a-patch-with-git).
 
 You should always run the following commands:
 
 > `git apply --stat cool_feature.patch    # Check what the patch will do`  
-
 > `git apply --check cool_feature.patch   # Check if the patch fails`  
-
 > `git am --signoff < cool_feature.patch`  
 
 
 ### Create patches
 
 > `git format-patch -1                # Creates one patch file for the commit`  
-
 > `git format-patch -2 HEAD           # Creates two patch files for last two commits on HEAD`  
-
 > `git format-patch -3 HEAD --stdout  # Print last 3 commit changes on stdout`  
-
 
 ### Solving Mistakes
 
 Accidental "git add"
-
 > `git reset HEAD []`  
-
 
 Accidental commit of too many files
 
 > `git reset --soft HEAD^`  
-
-
 > `git status         # to list all added files`  
-
 > `git reset <files>  # to remove incorrectly added files`  
 
 
@@ -148,119 +133,76 @@ is useful to put debugging or experimental changes to the "background".
 Here are the commands:
 
 > `git stash "Some test I made"    # Stash some changes away`  
-
 > `git stash list                  # List stashes`  
-
 > `git stash show stash@{0}        # Show changes file in last stash`  
-
 > `git stash show -p stash@{0}     # Show patch for last stash`  
-
-
 > `git stash apply stash@{0}       # Get last stash active again`  
-
 > `git stash drop stash@{0}        # Delete last stash`  
-
-
 > `git stash pop                   # Apply and remove last stash`  
-
-
 > `git stash clear                 # Delete all stashes`  
 
 
 ### Stash just some files by adding all others first and using --keep-index
 > `git add <files>`  
-
 > `git stash --keep-index`  
 
-
 ### List Commits in One Line Each
-
 > `git rev-list --all --pretty=oneline`  
-
 
 ### Search in Commits
 
 To search all commits for lines containing a certain change:
-
 > `git log -p -S -- `  
-
 > `git log -p -G -- `  
 
 
 ### Disecting
 
 > `git disect start <recent commit> <older commit>`  
-
-    
 > `git disect good`  
-
 > `git disect bad`  
-
-    
 > `git disect reset`  
-
 
 ## Tags
 
 > `git fetch --all --tags --prune`  
-
-
 > `git checkout tag/<tag> -b <branch>`  
-
 > `git clone <repo> --branch=<tag>`  
-
-    
 > `git tag                    # List all tags`  
-
 > `git tag <tag>              # Create tag`  
-
 > `git tag -a <tag> -m <msg>  # Create annotated tag`  
-
 > `git push --tags            # Push tags to remote`  
-
-    
 > `git tag -d <tag>         # Deletes tag in your local repo`  
-
 > `git push origin :<tag>   # Deletes tag remote`  
-
 
 ## Origins
 
 > `git remote -v                  # List`  
-
 > `git remote add <origin> <url>  # Add new origin`  
-
 > `git remote rm <origin>         # Remove`  
-
     
-    # Get a branch track a specific origin
+#### Get a branch track a specific origin
 > `git branch --set-upstream-to=<origin>/<branch> <branch>`  
-
     
-    # Remove remote branch
+#### Remove remote branch
 > `git push origin --delete <branch>`  
 
 
 ## Security
 
-### Enable git password Caching
-
+#### Enable git password Caching
 To keep passwords for 1h run
 
 > `git config --global credential.helper 'cache --timeout=3600'`  
 
-
 ### Allow insecure certificates
 
 One time only
-
 > `git clone <url> --config http.sslVerify=false`  
 
 
 Permanently for a give URL
-
 > `git config https.<remote url>/.sslVerify false`  
-
 
 ### Configuring specific proxy
 
@@ -269,7 +211,7 @@ Disable proxy for a given URL
 > `git config https.<remote url>/.proxy ""`  
 
 
-## Misc
+### Misc
 
 ### Update submodules
 
