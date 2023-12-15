@@ -1,4 +1,10 @@
-# Useful Tools  
+# Useful Tools and Resources  
+References, Links, and tools for DevSecOps.  
+Compiled from and while taking the SANS SEC540 Secure DevOps and Cloud Application Security course
+
+OWASP Infrastructure as Code Security Cheatsheet:
+https://cheatsheetseries.owasp.org/cheatsheets/Infrastructure_as_Code_Security_Cheat_Sheet.html
+
 
  **The OWASP AppSec Pipeline Project**  
 
@@ -144,6 +150,49 @@ https://github.com/Checkmarx/kics
 - SonarSource open-source (https://www.sonarsource.com/ruby/)
 - RubyMine IDE (https://www.jetbrains.com/ruby/)
 
+Python:
+- Bandit is an open-source tool from OpenStack Security to find common security problems in Python code (https://github.com/PyCQA/bandit)
+- Dlint helps ensure that Python code is secure (https://github.com/dlint-py/dlint)
+- Googles Pytype (https://github.com/google/pytype)
+- Pylint checks for bad coding practices and common errors (https://www.pylint.org/)
+- PyCharm is a Python IDE from JetBrains, which includes static analysis checking capabilities. It is available in a free community and licensed professional edition (https://www.jetbrains.com/pycharm/)
+- Pyre static analysis (type checking) from Facebook for Python 3 (https://pyre-check.org/)
+- Pyright from Microsoft for large codebases (https://github.com/Microsoft/pyright)
+- SonarSource open-source (https://www.sonarsource.com/python/)C/C++:
+- Cppcheck https://github.com/danmar/cppcheck
+- Clang https://clang-analyzer.llvm.org/
+- OCLint https://oclint.org/
+- Flawfinder https://dwheeler.com/flawfinder/
+- Infer from Facebook https://fbinfer.com/
+- SonarSource Commercial (https://www.sonarsource.com/c/)
+  
+**Objective C/Swift:**
+- XCode has Analyze built-in for Objective-C. This is not available for Swift as of XCode 9.2 December 2017, although many of the checks performed by XCode Analyze are not necessary in Swift https://stackoverflow.com/questions/29326036/is-it-not-possible-to-use-analyze-with-swift 
+- OCLint for Objective-C (http://oclint.org/)
+- SwitfLint https://github.com/realm/SwiftLint
+- Clang (Standalone or within Xcode) (https://clang-analyzer.llvm.org/)
+- Infer: a static analysis tool from Facebook that looks for null pointer exceptions, resource leaks, and memory leaks (https://fbinfer.com/)
+- Faux Pas (Commercial) analysis of Xcode (http://fauxpasapp.com/)
+- SonarSource Commercial (https://www.sonarsource.com/swift/)
+
+**Android**  In addition to common Java static analysis tools like Spotbugs, PMD, and error-prone, Android developers should consider these tools:
+- IDEA and Android Studio. The IntelliJ IDEA IDE has built-in code analysis checking for Java and Android, and support for several plugins. Google's Android Studio is built on top of IntelliJ. https://developer.android.com/studio/intro/
+- Android Lint checks for bugs, security, and performance (https://developer.android.com/studio/write/lint)
+- Custom Android Lint Rules: template for writing custom lint rules (https://github.com/a11n/CustomLintRules)
+- Infer: Static analysis tool from Facebook that looks for null pointer exceptions, resource leaks, and memory leaks (https://fbinfer.com/)
+- Qark: Quick Android Review Kit looks for common security-related problems in source code or packaged APKs (https://github.com/linkedin/qark)
+
+**Go** includes some basic static analysis checkers. Additional tools include:
+- Vet: vets Go source, reports on suspicious constructs (focus on correctness) (https://golang.org/cmd/vet/)
+- Lint: focuses on coding style (https://github.com/golang/lint)
+- dingo-hunter: finds deadlocks (https://github.com/nickng/dingo-hunter)
+- errcheck: checks for unhandled errors (https://github.com/kisielk/errcheck)
+- Gosec: scans for common security weaknesses (https://github.com/securego/gosec)
+- SafeSQL: checks SQL queries for SQL injections (https://github.com/stripe/safesql)
+- Check: aligncheck, structcheck, varcheck (https://gitlab.com/opennota/check)
+- SonarSource open-source (https://www.sonarsource.com/go/)See this list of Go static analysis tools: https://github.com/dominikh/go-toolsAlso, check out the following multi-language scanners:
+- GitHub's CodeQL https://codeql.github.com/
+- R2C's Semgrep: https://semgrep.dev/ 
 
 ## Commercial IDE plugins
 
