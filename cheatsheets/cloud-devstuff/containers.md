@@ -5,22 +5,22 @@ Containers, Container Images, Container Services, and Container......
 ## Minimal Base Images 
 
 -  [Google Container Tools Distroless](https://github.com/GoogleContainerTools/distrolessAlpine) 
--  Docker uses [Alpine]((https://hub.docker.com/_/alpine/)) for all official images 
--  Windows Nano Server (https://hub.docker.com/r/microsoft/nanoserver/)
+-  Docker uses [Alpine](https://hub.docker.com/_/alpine/)) for all official images 
+-  [Windows Nano Server](https://hub.docker.com/r/microsoft/nanoserver/)
 -  [Docker scratc](https://hub.docker.com/_/scratch/), which can be used to build up base images or other minimalist images
 
 
 ## Container Tools to remove unneeded files 
 
--  Docker Slim (https://github.com/docker-slim/docker-slim)
--  Strip Docker Image (https://github.com/mvanholsteijn/strip-docker-image)
+-  [Docker Slim        ](https://github.com/docker-slim/docker-slim)
+-  [Strip Docker Image ](https://github.com/mvanholsteijn/strip-docker-image)
 
 # Cloud Service Container Security Guides and Best Practices
 
-- [AWS ECS Security(]https://docs.aws.amazon.com/AmazonECS/latest/bestpracticesguide/security.html)
-- [AWS EKS Security(]https://docs.aws.amazon.com/eks/latest/userguide/security.html)
-- [Azure Kubernetes Security Baseline(]https://docs.microsoft.com/en-us/security/benchmark/azure/baselines/aks-security-baseline)
-- [GKE Configuring Cluster Security(]https://cloud.google.com/kubernetes-engine/docs/how-to/hardening-your-cluster)
+- [AWS ECS Security](https://docs.aws.amazon.com/AmazonECS/latest/bestpracticesguide/security.html)
+- [AWS EKS Security](https://docs.aws.amazon.com/eks/latest/userguide/security.html)
+- [Azure Kubernetes Security Baseline](https://docs.microsoft.com/en-us/security/benchmark/azure/baselines/aks-security-baseline)
+- [GKE Configuring Cluster Security](https://cloud.google.com/kubernetes-engine/docs/how-to/hardening-your-cluster)
 
 ## OSSTools for Kubernetes
 
