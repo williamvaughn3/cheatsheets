@@ -78,6 +78,32 @@ Removing files/directories
     if ($PSVersionTable.PSVersion.Major -lt 5) {
         # ...
     }
+
+
+# Get all local users
+$localUsers = Get-LocalUser
+
+# Loop through each user and get their group memberships
+$userGroups = foreach ($user in $localUsers) {
+    # Get the user's group memberships
+    $groups = Get-LocalGroup | ForEach-Object {
+        if (Get-LocalGroupMember -Group $_.Name -Member $user.Name -ErrorAction SilentlyContinue) {
+            $_.Name
+        }
+    }
+
+    # Create a custom object for easy readability
+    [PSCustomObject]@{
+        UserName = $user.Name
+        Groups   = $groups -join ', '
+    }
+}
+
+# Output the results
+$userGroups | Format-Table -AutoSize
+
+# Optionally, export the results to a CSV file
+$userGroups | Export-Csv -Path "C:\Path\To\Your\Export\LocalUsersAndGroups.csv" -NoTypeInformation -Encoding UTF8
     
 ## Using a proxy
 
